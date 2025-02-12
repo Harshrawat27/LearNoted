@@ -1,6 +1,7 @@
 // app/api/vocabulary/route.js
 
-import { NextRequest, NextResponse } from 'next/server';
+// import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../lib/authOptions';
 import { z } from 'zod';
@@ -41,7 +42,7 @@ export async function POST(req) {
       userEmail = decoded.email;
     } catch (err) {
       return NextResponse.json(
-        { error: 'Invalid token' },
+        { error: `Invalid token ${err}` },
         { status: 401, headers: corsHeaders }
       );
     }

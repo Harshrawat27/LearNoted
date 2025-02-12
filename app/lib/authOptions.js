@@ -1,5 +1,5 @@
 // app/lib/authOptions.js
-import NextAuth from 'next-auth';
+// import NextAuth from 'next-auth';
 import GitHubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google'; // Import Google provider
 import dbConnect from './dbConnect';
@@ -41,7 +41,8 @@ export const authOptions = {
         return false;
       }
     },
-    async session({ session, token }) {
+    // async session({ session, token }) { if need to add token in future
+    async session({ session }) {
       await dbConnect();
       const dbUser = await User.findOne({ email: session.user.email });
       if (dbUser) {
