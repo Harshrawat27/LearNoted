@@ -33,7 +33,7 @@ export const authOptions = {
             email: user.email,
             name: user.name || 'Google User',
           });
-          console.log('New user created:', user.email);
+          // console.log('New user created:', user.email);
         }
         return true;
       } catch (error) {
@@ -52,7 +52,7 @@ export const authOptions = {
           { expiresIn: '1h' }
         );
         session.token = jwtToken;
-        console.log('Generated JWT:', jwtToken);
+        // console.log('Generated JWT:', jwtToken);
       }
       return session;
     },

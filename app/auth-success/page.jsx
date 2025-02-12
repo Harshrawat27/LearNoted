@@ -6,7 +6,7 @@ export default function AuthSuccess() {
     fetch('/api/auth/token')
       .then((res) => res.json())
       .then(({ token }) => {
-        console.log('Token received in auth-success page:', token);
+        // console.log('Token received in auth-success page:', token);
         window.postMessage(
           {
             type: 'EXTENSION_TOKEN',
