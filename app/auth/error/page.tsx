@@ -1,9 +1,10 @@
-// app/auth/error/page.jsx
 'use client';
 
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-export default function ErrorPage() {
+function ErrorContent() {
+  // useSearchParams is a client hook and now is safely wrapped by Suspense
   const searchParams = useSearchParams();
   const error = searchParams.get('error') || 'An unknown error occurred.';
   const errorDescription = searchParams.get('error_description') || '';
@@ -14,5 +15,13 @@ export default function ErrorPage() {
       <p>{error}</p>
       {errorDescription && <p>{errorDescription}</p>}
     </div>
+  );
+}
+
+export default function ErrorPage() {
+  return (
+    <Suspense fallback={<div>Loading error details...</div>}>
+      <ErrorContent />
+    </Suspense>
   );
 }
