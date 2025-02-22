@@ -23,7 +23,8 @@ export default function PayPalButton({ userId }) {
     return data.orderID; // Must return orderID to the PayPal Buttons component
   };
 
-  const onApprove = async (data, actions) => {
+  // const onApprove = async (data, actions) => {
+  const onApprove = async (data) => {
     try {
       const res = await fetch('/api/paypal/capture-order', {
         method: 'POST',
