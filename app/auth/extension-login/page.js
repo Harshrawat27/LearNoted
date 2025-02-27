@@ -15,7 +15,7 @@ export default function ExtensionLogin() {
       // Send token to extension
       if (typeof chrome !== 'undefined' && chrome.runtime) {
         chrome.runtime.sendMessage(
-          '<your-extension-id>',
+          'jpnlaecekabfknkhcpahcidhcbadlpcj',
           { token: session.token },
           (response) => {
             console.log('Token sent to extension', response);
