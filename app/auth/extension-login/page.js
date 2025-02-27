@@ -18,7 +18,7 @@ export default function ExtensionLogin() {
           '<your-extension-id>',
           { token: session.token },
           (response) => {
-            console.log('Token sent to extension');
+            console.log('Token sent to extension', response);
           }
         );
       }
