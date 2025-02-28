@@ -1,13 +1,19 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'img.freepik.com',
+      },
+    ],
+  },
   async headers() {
     return [
       {
-        // Applies to all routes
         source: '/api/:path*',
         headers: [
           { key: 'Access-Control-Allow-Credentials', value: 'true' },
-          { key: 'Access-Control-Allow-Origin', value: '*' }, // Be specific in production
+          { key: 'Access-Control-Allow-Origin', value: '*' },
           {
             key: 'Access-Control-Allow-Methods',
             value: 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
@@ -22,5 +28,3 @@ const nextConfig = {
     ];
   },
 };
-
-module.exports = nextConfig;
