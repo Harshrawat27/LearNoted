@@ -50,7 +50,7 @@ export default function UsagePageClient({
     if (timeRange === 'all') return usageData;
 
     const now = new Date();
-    let cutoffDate = new Date();
+    const cutoffDate = new Date();
 
     if (timeRange === 'week') {
       cutoffDate.setDate(now.getDate() - 7);

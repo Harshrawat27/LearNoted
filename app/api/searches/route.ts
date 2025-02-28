@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import dbConnect from '../../lib/dbConnect'; // Adjust the import path as needed
-import { Search } from '@/models/Search';
+import { FilterQuery } from 'mongoose';
+import { Search } from '@/models/Search'; // Adjust the path to your Search model
+import dbConnect from '../../lib/dbConnect'; // Adjust the path to your DB connection
 
 export async function GET(req: NextRequest) {
   await dbConnect();
@@ -14,10 +15,13 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
   }
 
+  // Infer the document type from the Search model
+  type SearchDocument = InstanceType<typeof Search>;
+
   const skip = (page - 1) * limit;
-  const query: any = { user: userId };
+  const query: FilterQuery<SearchDocument> = { user: userId };
   if (search) {
-    query.word = { $regex: search, $options: 'i' }; // Case-insensitive search on word field
+    query.word = { $regex: search, $options: 'i' }; // Case-insensitive search
   }
 
   try {
@@ -31,7 +35,7 @@ export async function GET(req: NextRequest) {
     const hasMore = skip + searches.length < total;
 
     return NextResponse.json({
-      searches: JSON.parse(JSON.stringify(searches)), // Serialize Mongoose docs
+      searches: JSON.parse(JSON.stringify(searches)), // Handle Mongoose lean objects
       hasMore,
     });
   } catch (error) {
