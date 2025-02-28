@@ -367,12 +367,12 @@ export default function HighlightsPageClient({
                   </div>
                 </div>
 
-                <div>
+                {/* <div>
                   <h3 className='text-lg font-semibold mb-2'>Context</h3>
                   <p className='text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 p-4 rounded-lg'>
                     {selectedHighlight.context}
                   </p>
-                </div>
+                </div> */}
 
                 <div>
                   <h3 className='text-lg font-semibold mb-2'>Source</h3>
