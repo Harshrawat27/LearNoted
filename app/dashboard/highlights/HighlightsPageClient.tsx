@@ -48,7 +48,7 @@ export default function HighlightsPageClient({
     try {
       const urlObj = new URL(url);
       return urlObj.hostname;
-    } catch (e) {
+    } catch {
       return url;
     }
   };
@@ -87,28 +87,28 @@ export default function HighlightsPageClient({
   );
 
   // Local filtering function for when API doesn't support domain search
-  const filterHighlights = (
-    allHighlights: HighlightItem[],
-    term: string,
-    filter: string
-  ): HighlightItem[] => {
-    if (!term) return allHighlights;
+  //   const filterHighlights = (
+  //     allHighlights: HighlightItem[],
+  //     term: string,
+  //     filter: string
+  //   ): HighlightItem[] => {
+  //     if (!term) return allHighlights;
 
-    const lowerTerm = term.toLowerCase();
+  //     const lowerTerm = term.toLowerCase();
 
-    return allHighlights.filter((highlight) => {
-      if (filter === 'domain' || filter === 'all') {
-        const domain = getDomain(highlight.url).toLowerCase();
-        if (domain.includes(lowerTerm)) return true;
-      }
+  //     return allHighlights.filter((highlight) => {
+  //       if (filter === 'domain' || filter === 'all') {
+  //         const domain = getDomain(highlight.url).toLowerCase();
+  //         if (domain.includes(lowerTerm)) return true;
+  //       }
 
-      if (filter === 'text' || filter === 'all') {
-        if (highlight.text.toLowerCase().includes(lowerTerm)) return true;
-      }
+  //       if (filter === 'text' || filter === 'all') {
+  //         if (highlight.text.toLowerCase().includes(lowerTerm)) return true;
+  //       }
 
-      return false;
-    });
-  };
+  //       return false;
+  //     });
+  //   };
 
   // Reset and fetch when search term changes
   useEffect(() => {
@@ -362,7 +362,7 @@ export default function HighlightsPageClient({
                         getColorClasses(selectedHighlight.color).text
                       } text-lg`}
                     >
-                      "{selectedHighlight.text}"
+                      &quot;{selectedHighlight.text}&quot;
                     </p>
                   </div>
                 </div>
