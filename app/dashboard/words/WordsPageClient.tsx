@@ -249,8 +249,8 @@ export default function WordsPageClient({
                 <div>
                   <h3 className='text-lg font-semibold mb-2'>Example Usage</h3>
                   <p className='italic text-gray-600 dark:text-gray-400'>
-                    "The professor used the word '{selectedWord.word}' in the
-                    context of linguistic theory."
+                    &quot;The professor used the word &apos;{selectedWord.word}
+                    &apos; in the context of linguistic theory.&quot;
                   </p>
                 </div>
               </div>
