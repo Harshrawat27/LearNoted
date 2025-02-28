@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import dbConnect from '../../../lib/dbConnect'; // Adjust path based on your project structure
+import dbConnect from '../../lib/dbConnect'; // Adjust path based on your project structure
 import YoutubeHighlight from '../../../models/YoutubeHighlight'; // Adjust path based on your project structure
 
 export async function POST(request) {
