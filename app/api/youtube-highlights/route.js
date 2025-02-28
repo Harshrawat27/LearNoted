@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import dbConnect from '../../lib/dbConnect';
-import YoutubeHighlight from '../../models/YoutubeHighlight';
+import YoutubeHighlight from '../../../models/YoutubeHighlight';
 
 export default async function handler(req, res) {
   await dbConnect();
