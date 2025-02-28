@@ -4,7 +4,15 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { UserCircle, BarChart3, BookOpen, Menu, X, LogOut } from 'lucide-react';
+import {
+  UserCircle,
+  BarChart3,
+  BookOpen,
+  Menu,
+  X,
+  LogOut,
+  Highlighter,
+} from 'lucide-react';
 
 export default function DashboardLayout({
   children,
@@ -44,6 +52,11 @@ export default function DashboardLayout({
       label: 'Saved Words',
       href: '/dashboard/words',
       icon: <BookOpen className='w-5 h-5' />,
+    },
+    {
+      label: 'Highlighted Text',
+      href: '/dashboard/highlights',
+      icon: <Highlighter className='w-5 h-5' />,
     },
   ];
 

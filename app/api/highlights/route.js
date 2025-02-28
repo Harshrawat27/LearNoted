@@ -101,15 +101,56 @@ export async function GET(req) {
     );
   }
 
-  const url = new URL(req.url).searchParams.get('url');
+  const url = new URL(req.url);
+  const page = parseInt(url.searchParams.get('page') || '1');
+  const limit = parseInt(url.searchParams.get('limit') || '20');
+  const search = url.searchParams.get('search') || '';
+  const searchType = url.searchParams.get('searchType') || 'all'; // Extract searchType
+  const urlFilter = url.searchParams.get('url') || '';
 
   try {
-    const highlights = await Highlight.find({
-      userEmail,
-      ...(url ? { url } : {}),
-    }).sort({ createdAt: -1 });
+    let query = { userEmail };
 
-    return NextResponse.json(highlights, { headers: corsHeaders });
+    // Apply exact URL filter if provided
+    if (urlFilter) {
+      query.url = urlFilter;
+    }
+
+    // Apply search based on searchType
+    if (search) {
+      if (searchType === 'domain') {
+        query.url = { $regex: search, $options: 'i' }; // Search in url
+      } else if (searchType === 'text') {
+        query.$or = [
+          { text: { $regex: search, $options: 'i' } },
+          { context: { $regex: search, $options: 'i' } },
+        ]; // Search in text and context
+      } else if (searchType === 'all') {
+        query.$or = [
+          { url: { $regex: search, $options: 'i' } },
+          { text: { $regex: search, $options: 'i' } },
+          { context: { $regex: search, $options: 'i' } },
+        ]; // Search in url, text, and context
+      }
+    }
+
+    const skip = (page - 1) * limit;
+    const highlights = await Highlight.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    const total = await Highlight.countDocuments(query);
+    const hasMore = skip + highlights.length < total;
+
+    return NextResponse.json(
+      {
+        highlights: JSON.parse(JSON.stringify(highlights)),
+        hasMore,
+      },
+      { headers: corsHeaders }
+    );
   } catch (error) {
     console.error('Highlight fetch error:', error);
     return NextResponse.json(

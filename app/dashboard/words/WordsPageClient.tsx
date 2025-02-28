@@ -147,7 +147,7 @@ export default function WordsPageClient({
                         </div>
                       </div>
                       <ChevronRight
-                        className={`h-5 w-5 text-gray-400 ${
+                        className={`min-h-5 min-w-5 max-h-5 max-w-5 text-gray-400 ${
                           selectedWord?._id === search._id
                             ? 'text-purple-500'
                             : ''
