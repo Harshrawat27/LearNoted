@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Extract token from Authorization header
+    // Extract token from Authorization header -- to relaunch the app
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized' });
