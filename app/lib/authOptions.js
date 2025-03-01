@@ -53,7 +53,7 @@ export const authOptions = {
           { expiresIn: '1h' }
         );
         session.token = jwtToken;
-        console.log('Generated JWT:', jwtToken);
+        // console.log('Generated JWT:', jwtToken);
       }
       return session;
     },

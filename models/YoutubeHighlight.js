@@ -1,39 +1,17 @@
 import mongoose from 'mongoose';
 
+const TimestampSchema = new mongoose.Schema({
+  timestamp: String,
+  formattedTime: String,
+  comment: String,
+});
+
 const YouTubeTimestampSchema = new mongoose.Schema({
-  videoId: {
-    type: String,
-    required: true,
-  },
-  videoUrl: {
-    type: String,
-    required: true,
-  },
-  videoTitle: {
-    type: String,
-    required: true,
-  },
-  timestamp: {
-    type: Number, // Time in seconds
-    required: true,
-  },
-  formattedTime: {
-    type: String, // e.g., "12:34"
-    required: true,
-  },
-  comment: {
-    type: String,
-    required: true,
-  },
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // Assumes a User model exists
-    required: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+  videoId: { type: String, required: true },
+  videoUrl: String,
+  videoTitle: String,
+  userId: { type: String, required: true },
+  timestamps: [TimestampSchema],
 });
 
 export default mongoose.models.YouTubeTimestamp ||

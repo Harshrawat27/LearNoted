@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
-import dbConnect from '../../lib/dbConnect'; // Adjust path as needed
+import dbConnect from '../../lib/dbConnect';
 import YouTubeTimestamp from '../../../models/YoutubeHighlight';
 
 export async function POST(request) {
@@ -26,18 +26,28 @@ export async function POST(request) {
     const { videoId, videoUrl, videoTitle, timestamp, formattedTime, comment } =
       await request.json();
 
-    // Create and save new timestamp
-    const newTimestamp = new YouTubeTimestamp({
+    // Find existing document for the video and user
+    let existingDoc = await YouTubeTimestamp.findOne({
       videoId,
-      videoUrl,
-      videoTitle,
-      timestamp,
-      formattedTime,
-      comment,
-      userId: decoded.sub, // User ID from token
+      userId: decoded.sub,
     });
 
-    await newTimestamp.save();
+    if (existingDoc) {
+      // Append new timestamp to the array
+      existingDoc.timestamps = existingDoc.timestamps || [];
+      existingDoc.timestamps.push({ timestamp, formattedTime, comment });
+      await existingDoc.save();
+    } else {
+      // Create new document with the first timestamp
+      const newTimestamp = new YouTubeTimestamp({
+        videoId,
+        videoUrl,
+        videoTitle,
+        userId: decoded.sub,
+        timestamps: [{ timestamp, formattedTime, comment }],
+      });
+      await newTimestamp.save();
+    }
 
     return NextResponse.json(
       { message: 'Timestamp saved successfully' },
@@ -45,11 +55,9 @@ export async function POST(request) {
     );
   } catch (error) {
     console.error('Error saving timestamp:', error);
-
     if (error.name === 'JsonWebTokenError') {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
-
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
