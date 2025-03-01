@@ -1,7 +1,7 @@
 // app/api/timestamps/route.js
 import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/dbConnect';
-import { Video } from '@/models/Timestamp';
+import dbConnect from '../../lib/dbConnect';
+import { Video } from '../../../models/YoutubeHighlight';
 
 // GET all timestamps (across all videos)
 export async function GET() {
