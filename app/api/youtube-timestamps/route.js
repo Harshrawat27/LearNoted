@@ -1,66 +1,85 @@
+// app/api/timestamps/route.js
 import { NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
-import dbConnect from '../../lib/dbConnect';
-import YouTubeTimestamp from '../../../models/YoutubeHighlight';
+import dbConnect from '@/lib/dbConnect';
+import { Video } from '@/models/Timestamp';
 
-export async function POST(request) {
+// GET all timestamps (across all videos)
+export async function GET() {
+  await dbConnect();
+
   try {
-    // Extract token from Authorization header
-    const authorization = request.headers.get('authorization');
-    const token = authorization?.split(' ')[1];
+    const videos = await Video.find({});
+    let allTimestamps = [];
 
-    if (!token) {
-      return NextResponse.json({ error: 'No token provided' }, { status: 401 });
-    }
-
-    // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    if (!decoded.sub) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-    }
-
-    // Connect to MongoDB
-    await dbConnect();
-
-    // Extract timestamp data from request body
-    const { videoId, videoUrl, videoTitle, timestamp, formattedTime, comment } =
-      await request.json();
-
-    // Find existing document for the video and user
-    let existingDoc = await YouTubeTimestamp.findOne({
-      videoId,
-      userId: decoded.sub,
+    videos.forEach((video) => {
+      video.timestamps.forEach((timestamp) => {
+        allTimestamps.push({
+          videoId: video.videoId,
+          timestamp: timestamp,
+        });
+      });
     });
 
-    if (existingDoc) {
-      // Append new timestamp to the array
-      existingDoc.timestamps = existingDoc.timestamps || [];
-      existingDoc.timestamps.push({ timestamp, formattedTime, comment });
-      await existingDoc.save();
-    } else {
-      // Create new document with the first timestamp
-      const newTimestamp = new YouTubeTimestamp({
-        videoId,
-        videoUrl,
-        videoTitle,
-        userId: decoded.sub,
-        timestamps: [{ timestamp, formattedTime, comment }],
-      });
-      await newTimestamp.save();
+    return NextResponse.json(
+      { success: true, data: allTimestamps },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 400 }
+    );
+  }
+}
+
+// POST a new timestamp
+export async function POST(request) {
+  await dbConnect();
+
+  try {
+    const body = await request.json();
+    const { videoId, videoTitle, time, comment } = body;
+
+    if (!videoId || time === undefined || !comment) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'VideoId, time, and comment are required',
+        },
+        { status: 400 }
+      );
     }
 
+    // Find video or create if it doesn't exist
+    let video = await Video.findOne({ videoId });
+
+    if (!video) {
+      video = new Video({
+        videoId,
+        title: videoTitle || '',
+        timestamps: [],
+      });
+    }
+
+    // Add new timestamp to the video
+    video.timestamps.push({
+      time,
+      comment,
+    });
+
+    await video.save();
+
     return NextResponse.json(
-      { message: 'Timestamp saved successfully' },
+      {
+        success: true,
+        data: video.timestamps[video.timestamps.length - 1],
+      },
       { status: 201 }
     );
   } catch (error) {
-    console.error('Error saving timestamp:', error);
-    if (error.name === 'JsonWebTokenError') {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-    }
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { success: false, error: error.message },
+      { status: 400 }
     );
   }
 }
