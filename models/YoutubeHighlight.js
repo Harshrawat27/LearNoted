@@ -1,12 +1,24 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const YoutubeHighlightSchema = new mongoose.Schema({
+const YouTubeTimestampSchema = new mongoose.Schema({
+  videoId: {
+    type: String,
+    required: true,
+  },
   videoUrl: {
     type: String,
     required: true,
   },
+  videoTitle: {
+    type: String,
+    required: true,
+  },
   timestamp: {
-    type: Number, // Stored in seconds
+    type: Number, // Time in seconds
+    required: true,
+  },
+  formattedTime: {
+    type: String, // e.g., "12:34"
     required: true,
   },
   comment: {
@@ -14,8 +26,8 @@ const YoutubeHighlightSchema = new mongoose.Schema({
     required: true,
   },
   userId: {
-    type: mongoose.Schema.Types.ObjectId, // References the User collection
-    ref: 'User',
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // Assumes a User model exists
     required: true,
   },
   createdAt: {
@@ -24,6 +36,5 @@ const YoutubeHighlightSchema = new mongoose.Schema({
   },
 });
 
-module.exports =
-  mongoose.models.YoutubeHighlight ||
-  mongoose.model('YoutubeHighlight', YoutubeHighlightSchema);
+export default mongoose.models.YouTubeTimestamp ||
+  mongoose.model('YouTubeTimestamp', YouTubeTimestampSchema);
