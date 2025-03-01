@@ -18,7 +18,7 @@ async function getUserFromRequest(req) {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       userEmail = decoded.email;
     } catch (err) {
-      throw new Error('Invalid token');
+      throw new Error('Invalid token', err);
     }
   }
 
