@@ -1,10 +1,9 @@
-// backend/models/Timestamp.js
+// models/YoutubeHighlight.js
 import mongoose from 'mongoose';
 
-// Define schema for individual timestamps
 const TimestampSchema = new mongoose.Schema({
   time: {
-    type: Number, // Time in seconds
+    type: Number,
     required: true,
   },
   comment: {
@@ -17,20 +16,19 @@ const TimestampSchema = new mongoose.Schema({
   },
 });
 
-// Define schema for videos that contain timestamps
 const VideoSchema = new mongoose.Schema({
   videoId: {
-    type: String, // YouTube video ID
+    type: String,
     required: true,
-    unique: true,
+    unique: false, // Changed from true to false to allow multiple users per video
   },
   title: {
-    type: String, // Video title (optional)
+    type: String,
     default: '',
   },
-  timestamps: [TimestampSchema], // Array of timestamps for this video
+  timestamps: [TimestampSchema],
   userId: {
-    type: String, // For user-specific timestamps if you implement authentication
+    type: String,
     default: 'anonymous',
   },
   createdAt: {
@@ -43,13 +41,11 @@ const VideoSchema = new mongoose.Schema({
   },
 });
 
-// Update the updatedAt field before saving
 VideoSchema.pre('save', function (next) {
   this.updatedAt = Date.now();
   next();
 });
 
-// Create models if they don't exist, or use existing ones
 export const Timestamp =
   mongoose.models.Timestamp || mongoose.model('Timestamp', TimestampSchema);
 export const Video =
