@@ -83,7 +83,7 @@ export async function POST(req) {
     const user = await getUserFromRequest(req);
 
     const body = await req.json();
-    const { videoId, videoTitle, time, comment } = body;
+    const { videoId, videoTitle, time, comment, channelName } = body;
 
     if (!videoId || time === undefined || !comment) {
       return NextResponse.json(
@@ -99,6 +99,7 @@ export async function POST(req) {
         videoId,
         title: videoTitle || '',
         userId: user._id,
+        channelName: channelName || '',
         timestamps: [],
       });
     }

@@ -22,6 +22,8 @@ const VideoSchema = new mongoose.Schema({
     required: true,
     unique: false, // Changed from true to false to allow multiple users per video
   },
+  channelName: { type: String, default: '' }, // New field for channel name
+
   title: {
     type: String,
     default: '',
