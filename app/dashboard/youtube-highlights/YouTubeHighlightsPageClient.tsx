@@ -63,7 +63,7 @@ export default function YouTubeHighlightsPageClient({
       setIsLoading(true);
       try {
         const response = await fetch(
-          `/api/youtube-highlights?page=${currentPage}&limit=${itemsPerPage}&search=${encodeURIComponent(
+          `/api/youtube-timestamps?page=${currentPage}&limit=${itemsPerPage}&search=${encodeURIComponent(
             currentSearch
           )}&searchType=${searchType}`
         );

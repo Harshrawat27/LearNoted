@@ -43,58 +43,43 @@ async function getUserFromRequest(req) {
 }
 
 export async function GET(request) {
-  // Check authentication
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  // Connect to database
-  await dbConnect();
-
-  // Get query parameters
-  const searchParams = request.nextUrl.searchParams;
-  const page = parseInt(searchParams.get('page') || '1');
-  const limit = parseInt(searchParams.get('limit') || '20');
-  const search = searchParams.get('search') || '';
-  const searchType = searchParams.get('searchType') || 'all';
-
-  const userId = session.user?.id;
-  if (!userId) {
-    return NextResponse.json({ error: 'User ID not found' }, { status: 400 });
-  }
-
-  // Calculate skip value for pagination
-  const skip = (page - 1) * limit;
-
-  // Build query based on search parameters
-  let query = { userId };
-
-  if (search) {
-    if (searchType === 'all') {
-      query.$or = [
-        { channelName: { $regex: search, $options: 'i' } },
-        { title: { $regex: search, $options: 'i' } },
-        { 'timestamps.comment': { $regex: search, $options: 'i' } },
-      ];
-    } else if (searchType === 'channel') {
-      query.channelName = { $regex: search, $options: 'i' };
-    } else if (searchType === 'title') {
-      query.title = { $regex: search, $options: 'i' };
-    } else if (searchType === 'comment') {
-      query['timestamps.comment'] = { $regex: search, $options: 'i' };
-    }
-  }
-
   try {
-    // Fetch highlights based on query
+    const user = await getUserFromRequest(request);
+    const userId = user._id.toString();
+
+    await dbConnect();
+
+    const searchParams = request.nextUrl.searchParams;
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '20');
+    const search = searchParams.get('search') || '';
+    const searchType = searchParams.get('searchType') || 'all';
+
+    const skip = (page - 1) * limit;
+
+    let query = { userId };
+    if (search) {
+      if (searchType === 'all') {
+        query.$or = [
+          { channelName: { $regex: search, $options: 'i' } },
+          { title: { $regex: search, $options: 'i' } },
+          { 'timestamps.comment': { $regex: search, $options: 'i' } },
+        ];
+      } else if (searchType === 'channel') {
+        query.channelName = { $regex: search, $options: 'i' };
+      } else if (searchType === 'title') {
+        query.title = { $regex: search, $options: 'i' };
+      } else if (searchType === 'comment') {
+        query['timestamps.comment'] = { $regex: search, $options: 'i' };
+      }
+    }
+
     const highlights = await Video.find(query)
       .sort({ updatedAt: -1 })
       .skip(skip)
       .limit(limit)
       .lean();
 
-    // Get total count for pagination
     const totalCount = await Video.countDocuments(query);
     const hasMore = skip + highlights.length < totalCount;
 
