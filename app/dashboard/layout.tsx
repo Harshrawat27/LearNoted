@@ -12,6 +12,7 @@ import {
   X,
   LogOut,
   Highlighter,
+  Youtube,
 } from 'lucide-react';
 
 export default function DashboardLayout({
@@ -57,6 +58,11 @@ export default function DashboardLayout({
       label: 'Highlighted Text',
       href: '/dashboard/highlights',
       icon: <Highlighter className='w-5 h-5' />,
+    },
+    {
+      label: 'Youtube Highlight',
+      href: '/dashboard/youtube-highlights',
+      icon: <Youtube className='w-5 h-5' />,
     },
   ];
 

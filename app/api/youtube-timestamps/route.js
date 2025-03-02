@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../lib/authOptions';
 import dbConnect from '../../lib/dbConnect';
@@ -42,35 +42,72 @@ async function getUserFromRequest(req) {
   return user;
 }
 
-// Handle GET requests to fetch timestamps for a video
-export async function GET(req) {
+export async function GET(request) {
+  // Check authentication
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  // Connect to database
   await dbConnect();
 
-  try {
-    const user = await getUserFromRequest(req);
+  // Get query parameters
+  const searchParams = request.nextUrl.searchParams;
+  const page = parseInt(searchParams.get('page') || '1');
+  const limit = parseInt(searchParams.get('limit') || '20');
+  const search = searchParams.get('search') || '';
+  const searchType = searchParams.get('searchType') || 'all';
 
-    // Get videoId from query parameters
-    const videoId = req.nextUrl.searchParams.get('videoId');
-    if (!videoId) {
-      return NextResponse.json(
-        { error: 'videoId is required' },
-        { status: 400 }
-      );
+  const userId = session.user?.id;
+  if (!userId) {
+    return NextResponse.json({ error: 'User ID not found' }, { status: 400 });
+  }
+
+  // Calculate skip value for pagination
+  const skip = (page - 1) * limit;
+
+  // Build query based on search parameters
+  let query = { userId };
+
+  if (search) {
+    if (searchType === 'all') {
+      query.$or = [
+        { channelName: { $regex: search, $options: 'i' } },
+        { title: { $regex: search, $options: 'i' } },
+        { 'timestamps.comment': { $regex: search, $options: 'i' } },
+      ];
+    } else if (searchType === 'channel') {
+      query.channelName = { $regex: search, $options: 'i' };
+    } else if (searchType === 'title') {
+      query.title = { $regex: search, $options: 'i' };
+    } else if (searchType === 'comment') {
+      query['timestamps.comment'] = { $regex: search, $options: 'i' };
     }
+  }
 
-    // Fetch the video for this user and videoId
-    const video = await Video.findOne({ videoId, userId: user._id });
-    const timestamps = video ? video.timestamps : [];
+  try {
+    // Fetch highlights based on query
+    const highlights = await Video.find(query)
+      .sort({ updatedAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean();
 
-    return NextResponse.json(
-      { success: true, data: { timestamps } },
-      { status: 200 }
-    );
+    // Get total count for pagination
+    const totalCount = await Video.countDocuments(query);
+    const hasMore = skip + highlights.length < totalCount;
+
+    return NextResponse.json({
+      highlights,
+      hasMore,
+      total: totalCount,
+    });
   } catch (error) {
-    console.error('Error fetching timestamps:', error);
+    console.error('Error fetching YouTube highlights:', error);
     return NextResponse.json(
-      { error: error.message },
-      { status: error.message === 'Unauthorized' ? 401 : 500 }
+      { error: 'Failed to fetch YouTube highlights' },
+      { status: 500 }
     );
   }
 }
