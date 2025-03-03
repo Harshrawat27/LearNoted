@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../lib/authOptions'; // Adjust path
 import dbConnect from '../../lib/dbConnect'; // Adjust path
-import Highlight from '@/models/Highlight'; // Adjust path
+import { Highlight } from '@/models/Highlight'; // Adjust path
 import HighlightsPageClient from './HighlightsPageClient';
 
 export default async function HighlightsPage() {
