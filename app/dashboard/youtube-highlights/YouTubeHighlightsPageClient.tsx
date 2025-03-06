@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import Image from 'next/image';
 import {
   Search,
   ExternalLink,
@@ -317,7 +318,7 @@ export default function YouTubeHighlightsPageClient({
 
               {/* Video Thumbnail */}
               <div className='relative mb-6 w-full pt-[56.25%] bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden'>
-                <img
+                <Image
                   src={getVideoThumbnail(selectedHighlight.videoId)}
                   alt={selectedHighlight.title}
                   className='absolute inset-0 w-full h-full object-cover'

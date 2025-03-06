@@ -58,8 +58,8 @@ export async function OPTIONS() {
     headers: corsHeaders,
   });
 }
-
-export async function POST(req) {
+//export async function POST(req) {
+export async function POST() {
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user || !session.user.email) {
