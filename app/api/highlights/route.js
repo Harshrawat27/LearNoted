@@ -162,9 +162,9 @@
 
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../lib/authOptions';
+import { authOptions } from '../../lib/authOptions';
 import { z } from 'zod';
-import dbConnect from '../../../lib/dbConnect';
+import dbConnect from '../../lib/dbConnect';
 import { User } from '../../../models/User';
 import { Highlight } from '../../../models/Highlight';
 import jwt from 'jsonwebtoken';
