@@ -21,6 +21,7 @@
 //   });
 // }
 
+import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../lib/authOptions';
 import jwt from 'jsonwebtoken';
@@ -44,21 +45,28 @@ export async function GET() {
   });
 }
 
-// Add a POST method for the Chrome extension
-export async function POST() {
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, Origin',
+  'Access-Control-Allow-Credentials': 'true',
+};
+
+export async function OPTIONS() {
+  return NextResponse.json(null, {
+    status: 200,
+    headers: corsHeaders,
+  });
+}
+
+export async function POST(req) {
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user || !session.user.email) {
-    return new Response(JSON.stringify({ error: 'Not authenticated' }), {
-      status: 401,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, Origin',
-        'Access-Control-Allow-Credentials': 'true',
-      },
-    });
+    return NextResponse.json(
+      { error: 'Not authenticated' },
+      { status: 401, headers: corsHeaders }
+    );
   }
 
   // Create a JWT token
@@ -71,32 +79,11 @@ export async function POST() {
     { expiresIn: '30d' } // Token expires in 30 days
   );
 
-  return new Response(
-    JSON.stringify({
+  return NextResponse.json(
+    {
       token,
       email: session.user.email,
-    }),
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, Origin',
-        'Access-Control-Allow-Credentials': 'true',
-      },
-    }
-  );
-}
-
-// Add OPTIONS method for CORS
-export async function OPTIONS() {
-  return new Response(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization, Origin',
-      'Access-Control-Allow-Credentials': 'true',
     },
-  });
+    { headers: corsHeaders }
+  );
 }
