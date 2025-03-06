@@ -17,7 +17,7 @@ export default function DeleteDataPage() {
       const data = await response.json();
       setMessage(data.message);
     } catch (error) {
-      setMessage('Failed to delete data');
+      setMessage('Failed to delete data', error);
     }
 
     setLoading(false);

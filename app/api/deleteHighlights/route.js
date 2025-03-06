@@ -25,7 +25,9 @@ try {
 }
 
 // DELETE function for Next.js App Router API
-export async function DELETE(req) {
+//export async function DELETE(req) {
+
+export async function DELETE() {
   try {
     await connectDB();
     await Highlight.deleteMany({});
