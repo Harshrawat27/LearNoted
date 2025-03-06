@@ -170,10 +170,17 @@ import { Highlight } from '../../../models/Highlight';
 import jwt from 'jsonwebtoken';
 
 // Input validation schema
+// const HighlightSchema = z.object({
+//   url: z.string().url('Valid URL is required'),
+//   text: z.string().min(1, 'Highlighted text must not be empty'),
+//   color: z.string().min(1, 'Color must not be empty'),
+// });
+
 const HighlightSchema = z.object({
   url: z.string().url('Valid URL is required'),
   text: z.string().min(1, 'Highlighted text must not be empty'),
   color: z.string().min(1, 'Color must not be empty'),
+  serializedRange: z.string().min(1, 'Serialized range must not be empty'),
 });
 
 const corsHeaders = {
@@ -189,6 +196,88 @@ export async function OPTIONS() {
     headers: corsHeaders,
   });
 }
+
+// export async function POST(req) {
+
+//   await dbConnect();
+
+//   let userEmail = null;
+//   const authHeader = req.headers.get('authorization');
+//   if (authHeader && authHeader.startsWith('Bearer ')) {
+//     const token = authHeader.split(' ')[1];
+//     try {
+//       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//       userEmail = decoded.email;
+//     } catch (err) {
+//       return NextResponse.json(
+//         { error: `Invalid token ${err.message}` },
+//         { status: 401, headers: corsHeaders }
+//       );
+//     }
+//   }
+
+//   if (!userEmail) {
+//     const session = await getServerSession(authOptions);
+//     if (session && session.user && session.user.email) {
+//       userEmail = session.user.email;
+//     }
+//   }
+
+//   if (!userEmail) {
+//     return NextResponse.json(
+//       { error: 'Unauthorized' },
+//       { status: 401, headers: corsHeaders }
+//     );
+//   }
+
+//   try {
+//     let user = await User.findOne({ email: userEmail });
+//     if (!user) {
+//       return NextResponse.json(
+//         { error: 'User not found' },
+//         { status: 404, headers: corsHeaders }
+//       );
+//     }
+
+//     const body = await req.json();
+//     const { url, text, color } = HighlightSchema.parse(body);
+
+//     // Save the highlight to the database
+//     const highlight = await Highlight.create({
+//       user: user._id,
+//       url,
+//       text,
+//       color,
+//     });
+
+//     return NextResponse.json(
+//       {
+//         success: true,
+//         highlight: {
+//           id: highlight._id,
+//           url,
+//           text,
+//           color,
+//         },
+//       },
+//       { headers: corsHeaders }
+//     );
+//   } catch (error) {
+//     console.error('Highlight API Error:', error);
+//     return NextResponse.json(
+//       {
+//         error: 'Failed to save highlight',
+//         message: error instanceof Error ? error.message : 'Unknown error',
+//       },
+//       {
+//         status: 500,
+//         headers: corsHeaders,
+//       }
+//     );
+//   }
+// }
+
+// Get all highlights for the authenticated user
 
 export async function POST(req) {
   await dbConnect();
@@ -232,7 +321,7 @@ export async function POST(req) {
     }
 
     const body = await req.json();
-    const { url, text, color } = HighlightSchema.parse(body);
+    const { url, text, color, serializedRange } = HighlightSchema.parse(body);
 
     // Save the highlight to the database
     const highlight = await Highlight.create({
@@ -240,6 +329,7 @@ export async function POST(req) {
       url,
       text,
       color,
+      serializedRange,
     });
 
     return NextResponse.json(
@@ -250,6 +340,7 @@ export async function POST(req) {
           url,
           text,
           color,
+          serializedRange, // Optionally include in response
         },
       },
       { headers: corsHeaders }
@@ -269,7 +360,87 @@ export async function POST(req) {
   }
 }
 
-// Get all highlights for the authenticated user
+// export async function GET(req) {
+
+//   await dbConnect();
+
+//   let userEmail = null;
+//   const authHeader = req.headers.get('authorization');
+//   if (authHeader && authHeader.startsWith('Bearer ')) {
+//     const token = authHeader.split(' ')[1];
+//     try {
+//       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//       userEmail = decoded.email;
+//     } catch (err) {
+//       return NextResponse.json(
+//         { error: `Invalid token ${err.message}` },
+//         { status: 401, headers: corsHeaders }
+//       );
+//     }
+//   }
+
+//   if (!userEmail) {
+//     const session = await getServerSession(authOptions);
+//     if (session && session.user && session.user.email) {
+//       userEmail = session.user.email;
+//     }
+//   }
+
+//   if (!userEmail) {
+//     return NextResponse.json(
+//       { error: 'Unauthorized' },
+//       { status: 401, headers: corsHeaders }
+//     );
+//   }
+
+//   try {
+//     const user = await User.findOne({ email: userEmail });
+//     if (!user) {
+//       return NextResponse.json(
+//         { error: 'User not found' },
+//         { status: 404, headers: corsHeaders }
+//       );
+//     }
+
+//     // Get URL parameter if any (to filter by URL)
+//     const { searchParams } = new URL(req.url);
+//     const urlFilter = searchParams.get('url');
+
+//     const query = { user: user._id };
+//     if (urlFilter) {
+//       query.url = urlFilter;
+//     }
+
+//     const highlights = await Highlight.find(query).sort({ createdAt: -1 });
+
+//     return NextResponse.json(
+//       {
+//         success: true,
+//         highlights: highlights.map((h) => ({
+//           id: h._id,
+//           url: h.url,
+//           text: h.text,
+//           color: h.color,
+//           createdAt: h.createdAt,
+//         })),
+//       },
+//       { headers: corsHeaders }
+//     );
+//   } catch (error) {
+//     console.error('Get Highlights API Error:', error);
+//     return NextResponse.json(
+//       {
+//         error: 'Failed to fetch highlights',
+//         message: error instanceof Error ? error.message : 'Unknown error',
+//       },
+//       {
+//         status: 500,
+//         headers: corsHeaders,
+//       }
+//     );
+//   }
+// }
+
 export async function GET(req) {
   await dbConnect();
 
@@ -330,6 +501,7 @@ export async function GET(req) {
           url: h.url,
           text: h.text,
           color: h.color,
+          serializedRange: h.serializedRange,
           createdAt: h.createdAt,
         })),
       },
