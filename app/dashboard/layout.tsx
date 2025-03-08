@@ -54,11 +54,11 @@ export default function DashboardLayout({
       href: '/dashboard/words',
       icon: <BookOpen className='w-5 h-5' />,
     },
-    {
-      label: 'Highlighted Text',
-      href: '/dashboard/highlights',
-      icon: <Highlighter className='w-5 h-5' />,
-    },
+    // {
+    //   label: 'Highlighted Text',
+    //   href: '/dashboard/highlights',
+    //   icon: <Highlighter className='w-5 h-5' />,
+    // },
     {
       label: 'Youtube Highlight',
       href: '/dashboard/youtube-highlights',
