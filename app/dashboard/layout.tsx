@@ -11,7 +11,7 @@ import {
   Menu,
   X,
   LogOut,
-  Highlighter,
+  // Highlighter,
   Youtube,
 } from 'lucide-react';
 
