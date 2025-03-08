@@ -92,7 +92,7 @@ export default function DashboardLayout({
               height={40}
               className='rounded-full'
             /> */}
-            <h1 className='text-xl font-bold'>learNoted</h1>
+            <h1 className='text-xl font-bold'>LearNoted</h1>
           </div>
 
           {/* Nav Items */}

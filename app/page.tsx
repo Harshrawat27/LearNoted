@@ -32,7 +32,7 @@ export default function Home() {
         >
           <div className='bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md flex flex-col items-center text-center'>
             <Image
-              src='../public/window.svg' /* Replace with an appropriate image URL */
+              src='/learnoted-save-words.png' /* Replace with an appropriate image URL */
               alt='Feature 1'
               width={80}
               height={80}
