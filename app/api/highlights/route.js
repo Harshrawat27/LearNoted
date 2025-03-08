@@ -54,10 +54,17 @@ export async function POST(req) {
 
   try {
     const body = await req.json();
+
+    // Create highlight with all fields including context and charOffsets
     const highlight = await Highlight.create({
       userEmail,
-      ...body,
+      text: body.text,
+      color: body.color,
+      url: body.url,
+      context: body.context || '',
+      charOffsets: body.charOffsets || null,
     });
+
     return NextResponse.json(highlight, { headers: corsHeaders });
   } catch (error) {
     console.error('Highlight creation error:', error);

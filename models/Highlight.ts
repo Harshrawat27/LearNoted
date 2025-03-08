@@ -20,9 +20,15 @@ const HighlightSchema = new mongoose.Schema({
     enum: ['yellow', 'green', 'blue', 'pink', 'purple'],
     default: 'yellow',
   },
+  // Added field for storing surrounding text
   context: {
     type: String,
     default: '',
+  },
+  // Added field for character position data
+  charOffsets: {
+    type: Object,
+    default: null,
   },
   createdAt: {
     type: Date,
