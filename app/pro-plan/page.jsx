@@ -137,7 +137,8 @@ export default function ProPlanPage() {
           <div className='mt-6'>
             <PayPalScriptProvider
               options={{
-                'client-id': process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
+                'client-id':
+                  'AQSgOvOVSPVWI4pdNf1iKaEBfvzbCB4lX_fcIofql_h11iBBGqshpuJH5xbsrlU6Rxl8cs_vnWsQ8t4H',
                 currency: 'USD',
               }}
             >
