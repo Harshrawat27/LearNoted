@@ -41,7 +41,7 @@ export default function CleanPayPalButton({
 
     // Create a new script with all required parameters
     const script = document.createElement('script');
-    script.src = `https://www.paypal.com/sdk/js?client-id=AaMiLFzWk0BVxiQxMutU6uKkaRnK6ST4ABC3JzK4qNfjEFi9Z9d-3qLKgnFE60GBaZjR2--7QjuiQq7s&vault=true&intent=subscription&currency=USD`;
+    script.src = `https://www.paypal.com/sdk/js?client-id=AQSgOvOVSPVWI4pdNf1iKaEBfvzbCB4lX_fcIofql_h11iBBGqshpuJH5xbsrlU6Rxl8cs_vnWsQ8t4H&vault=true&intent=subscription&currency=USD`;
     script.async = true;
 
     // Add error handling
