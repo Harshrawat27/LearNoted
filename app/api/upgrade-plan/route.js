@@ -10,8 +10,13 @@ export async function POST(request) {
     // Get the user session
     const session = await getServerSession(authOptions);
 
-    if (!session) {
-      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    // If no session, return unauthorized
+    if (!session || !session.user || !session.user.email) {
+      console.log('Unauthorized access attempt to upgrade-plan API');
+      return NextResponse.json(
+        { message: 'Unauthorized. Please log in.' },
+        { status: 401 }
+      );
     }
 
     // Connect to database
@@ -19,8 +24,9 @@ export async function POST(request) {
 
     // Parse request body
     const body = await request.json();
-    //const { paymentId, paymentStatus } = body;
-    const { paymentStatus } = body;
+    const { paymentId, paymentStatus } = body;
+
+    console.log(`Processing payment: ${paymentId}, Status: ${paymentStatus}`);
 
     // Validate payment status
     if (paymentStatus !== 'COMPLETED') {
@@ -31,11 +37,15 @@ export async function POST(request) {
     }
 
     // Find the user by email
-    const user = await User.findOne({ email: session.user.email });
+    const userEmail = session.user.email;
+    const user = await User.findOne({ email: userEmail });
 
     if (!user) {
+      console.log(`User not found: ${userEmail}`);
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
+
+    console.log(`Upgrading user: ${userEmail} to paid plan`);
 
     // Update user subscription to 'paid'
     user.subscriptionPlan = 'paid';
@@ -45,6 +55,8 @@ export async function POST(request) {
 
     // Save the updated user
     await user.save();
+
+    console.log(`User successfully upgraded: ${userEmail}`);
 
     return NextResponse.json({
       message: 'Subscription successfully updated',

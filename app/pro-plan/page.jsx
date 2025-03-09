@@ -7,17 +7,15 @@ import { useRouter } from 'next/navigation';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 
 export default function ProPlan() {
-  // const { data: session, status } = useSession();
-  const { status } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
-  // We'll let the middleware handle the unauthenticated case
-  // This is just a safety check
+  // Check authentication status
   useEffect(() => {
+    // If authentication check is complete and user is not authenticated
     if (status === 'unauthenticated') {
-      console.log('Session not found in client component, redirecting...');
       router.push('/auth/signin?callbackUrl=/pro-plan');
     }
   }, [status, router]);
@@ -64,7 +62,7 @@ export default function ProPlan() {
     }
   };
 
-  // Show loading state while checking the session
+  // If still checking authentication status, show loading
   if (status === 'loading') {
     return (
       <div className='flex justify-center items-center min-h-screen'>
@@ -73,6 +71,17 @@ export default function ProPlan() {
     );
   }
 
+  // If authentication check is complete and user is not authenticated, don't render the page content
+  // The useEffect will handle the redirect
+  if (status === 'unauthenticated') {
+    return (
+      <div className='flex justify-center items-center min-h-screen'>
+        Redirecting to login...
+      </div>
+    );
+  }
+
+  // User is authenticated, render the page content
   return (
     <div className='min-h-screen bg-gray-50'>
       <main className='max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8'>
@@ -84,6 +93,13 @@ export default function ProPlan() {
             <p className='mt-2 text-center text-gray-600'>
               Unlock unlimited word searches for just $5
             </p>
+
+            {/* Display logged-in user info */}
+            {session && session.user && (
+              <div className='mt-4 text-center text-sm text-gray-500'>
+                Logged in as: {session.user.email}
+              </div>
+            )}
 
             <div className='mt-8 space-y-4'>
               <div className='border border-gray-200 rounded-md p-4'>
