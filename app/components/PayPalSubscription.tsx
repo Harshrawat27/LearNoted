@@ -6,7 +6,7 @@ import { toast } from 'react-hot-toast';
 import {
   PayPalCreateActions,
   PayPalOnApproveData,
-  PayPalOnApproveActions,
+  // PayPalOnApproveActions, to fix error
 } from '../types/paypal-types';
 
 interface PayPalSubscriptionProps {
@@ -61,7 +61,7 @@ export default function PayPalSubscription({
                 label: 'subscribe',
               },
               createSubscription: function (
-                data: any,
+                //    data: any, -- to fix error
                 actions: PayPalCreateActions
               ) {
                 return actions.subscription.create({
@@ -69,8 +69,8 @@ export default function PayPalSubscription({
                 });
               },
               onApprove: async function (
-                data: PayPalOnApproveData,
-                actions: PayPalOnApproveActions
+                data: PayPalOnApproveData
+                //  actions: PayPalOnApproveActions -- to fix error
               ) {
                 try {
                   // Update the user's subscription status in your DB
