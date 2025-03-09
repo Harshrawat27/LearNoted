@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import DirectPayPalButton from '../../components/DirectPayPalButton';
+import CleanPayPalButton from '../../components/CleanPayPalButton';
 import { toast } from 'react-hot-toast';
 
 interface UserData {
@@ -31,23 +31,6 @@ export default function SubscriptionClient({
   const refreshSubscription = useCallback(() => {
     router.refresh(); // Refresh the server component data
   }, [router]);
-
-  // Set up global window handler for PayPal success
-  useEffect(() => {
-    // Set up the global window handler for PayPal success
-    window.handlePayPalSuccess = (subscriptionId: string) => {
-      console.log('Subscription ID received:', subscriptionId);
-      // Manually update the UI to avoid a full page refresh
-      setCurrentPlan('paid');
-      // Then trigger a refresh to get the latest data from the server
-      refreshSubscription();
-    };
-
-    return () => {
-      // Clean up the handler when component unmounts
-      window.handlePayPalSuccess = undefined;
-    };
-  }, [refreshSubscription]);
 
   // Handle subscription cancellation
   const handleCancelSubscription = async () => {
@@ -135,7 +118,14 @@ export default function SubscriptionClient({
             $5/month.
           </p>
 
-          <DirectPayPalButton onSubscriptionSuccess={refreshSubscription} />
+          <CleanPayPalButton
+            onSubscriptionSuccess={() => {
+              // Update local state immediately for better UX
+              setCurrentPlan('paid');
+              // Then refresh server data
+              refreshSubscription();
+            }}
+          />
         </div>
       )}
     </div>
