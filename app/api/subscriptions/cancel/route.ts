@@ -6,8 +6,9 @@ import dbConnect from '../../../lib/dbConnect';
 
 // You'll need to create this utility with your PayPal credentials
 import { cancelPayPalSubscription } from '../../../lib/paypal';
+//export async function POST(request: Request) {
 
-export async function POST(request: Request) {
+export async function POST() {
   try {
     // Get the user session
     const session = await getServerSession(authOptions);

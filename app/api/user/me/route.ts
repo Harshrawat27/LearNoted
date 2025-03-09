@@ -4,7 +4,9 @@ import { authOptions } from '../../../lib/authOptions';
 import { User } from '../../../../models/User';
 import dbConnect from '../../../lib/dbConnect';
 
-export async function GET(request: Request) {
+//export async function GET(request: Request) {
+
+export async function GET() {
   try {
     // Get the user session
     const session = await getServerSession(authOptions);

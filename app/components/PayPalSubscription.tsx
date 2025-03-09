@@ -45,7 +45,7 @@ export default function PayPalSubscription({
               label: 'subscribe',
             },
             createSubscription: function (
-              data: any,
+              // data: any,  -- commented this to fix error
               actions: PayPalCreateActions
             ) {
               return actions.subscription.create({
@@ -53,8 +53,8 @@ export default function PayPalSubscription({
               });
             },
             onApprove: async function (
-              data: PayPalOnApproveData,
-              actions: PayPalOnApproveActions
+              data: PayPalOnApproveData
+              // actions: PayPalOnApproveActions  -- commented this to fix error
             ) {
               try {
                 // Update the user's subscription status in your DB
