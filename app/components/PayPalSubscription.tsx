@@ -6,7 +6,7 @@ import { toast } from 'react-hot-toast';
 import {
   PayPalCreateActions,
   PayPalOnApproveData,
-  PayPalOnApproveActions,
+  // PayPalOnApproveActions,  -- commented this to fix error
 } from '../types/paypal-types';
 
 interface PayPalSubscriptionProps {

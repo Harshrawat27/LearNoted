@@ -1,11 +1,27 @@
-// import crypto from 'crypto';  -- commented this to fix error
-import fetch from 'node-fetch';
+import {
+  PayPalSubscriptionDetails,
+  PayPalWebhookEvent,
+} from '../types/paypal-types';
 
 // PayPal API URLs
 const PAYPAL_API_URL =
   process.env.NODE_ENV === 'production'
     ? 'https://api-m.paypal.com'
     : 'https://api-m.sandbox.paypal.com';
+
+// Authentication Response Type
+interface PayPalAuthResponse {
+  access_token: string;
+  token_type: string;
+  app_id: string;
+  expires_in: number;
+  nonce: string;
+}
+
+// Webhook Verification Response
+interface PayPalWebhookVerificationResponse {
+  verification_status: 'SUCCESS' | 'FAILURE';
+}
 
 // Get access token from PayPal
 async function getPayPalAccessToken(): Promise<string> {
@@ -36,7 +52,7 @@ async function getPayPalAccessToken(): Promise<string> {
     );
   }
 
-  const data = (await response.json()) as { access_token: string };
+  const data = (await response.json()) as PayPalAuthResponse;
   return data.access_token;
 }
 
@@ -69,7 +85,9 @@ export async function cancelPayPalSubscription(
 }
 
 // Get subscription details
-export async function getSubscriptionDetails(subscriptionId: string) {
+export async function getSubscriptionDetails(
+  subscriptionId: string
+): Promise<PayPalSubscriptionDetails> {
   try {
     const accessToken = await getPayPalAccessToken();
 
@@ -90,7 +108,7 @@ export async function getSubscriptionDetails(subscriptionId: string) {
       );
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as PayPalSubscriptionDetails;
     return data;
   } catch (error) {
     console.error('Error getting subscription details:', error);
@@ -105,7 +123,7 @@ interface WebhookVerificationParams {
   certUrl: string;
   authAlgo: string;
   transmissionSig: string;
-  body: any;
+  body: PayPalWebhookEvent;
   webhookId: string;
 }
 
@@ -139,7 +157,7 @@ export async function verifyPayPalWebhook(
       return false;
     }
 
-    const data = (await response.json()) as { verification_status: string };
+    const data = (await response.json()) as PayPalWebhookVerificationResponse;
     return data.verification_status === 'SUCCESS';
   } catch (error) {
     console.error('Error verifying PayPal webhook:', error);
