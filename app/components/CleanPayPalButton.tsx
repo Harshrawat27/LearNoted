@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast';
 import {
   PayPalCreateActions,
   PayPalOnApproveData,
-  PayPalOnApproveActions,
+  //  PayPalOnApproveActions,
 } from '../../app/types/paypal-types';
 
 interface PayPalButtonProps {
@@ -77,8 +77,8 @@ export default function CleanPayPalButton({
                 });
               },
               onApprove: async function (
-                data: PayPalOnApproveData,
-                actions: PayPalOnApproveActions
+                data: PayPalOnApproveData
+                //  actions: PayPalOnApproveActions
               ) {
                 console.log('Subscription approved:', data);
                 setIsProcessing(true);
