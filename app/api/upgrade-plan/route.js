@@ -1,9 +1,9 @@
 // app/api/upgrade-plan/route.js
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../lib/authOptions'; // Adjust path as necessary
-import { User } from '../../../models/User';
+import { authOptions } from '../../lib/authOptions';
 import dbConnect from '../../lib/dbConnect';
+import { User } from '../../../models/User';
 
 export async function POST(request) {
   try {
@@ -19,8 +19,7 @@ export async function POST(request) {
 
     // Parse request body
     const body = await request.json();
-    //  const { paymentId, paymentStatus } = body;
-    const { paymentStatus } = body;
+    const { paymentId, paymentStatus } = body;
 
     // Validate payment status
     if (paymentStatus !== 'COMPLETED') {
@@ -57,7 +56,7 @@ export async function POST(request) {
   } catch (error) {
     console.error('Error upgrading plan:', error);
     return NextResponse.json(
-      { message: 'Internal server error' },
+      { message: 'Internal server error: ' + error.message },
       { status: 500 }
     );
   }

@@ -1,24 +1,26 @@
 // middleware.js
-import { withAuth } from 'next-auth/middleware';
 import { NextResponse } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 
-export default withAuth(
-  // Function that will be executed on protected routes
-  //function middleware(req) {
-  function middleware() {
-    // You can add additional logic here if needed
+export async function middleware(req) {
+  const token = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+
+  // If user is authenticated, allow access
+  if (token) {
     return NextResponse.next();
-  },
-  {
-    callbacks: {
-      // Return true if the user is authenticated, false otherwise
-      authorized: ({ token }) => !!token,
-    },
   }
-);
 
-// Define which routes to protect
+  // Redirect to signin page with a return URL
+  const url = req.nextUrl.clone();
+  url.pathname = '/auth/signin';
+  url.searchParams.set('callbackUrl', req.nextUrl.pathname);
+  return NextResponse.redirect(url);
+}
+
+// Specify which routes this middleware applies to
 export const config = {
-  // Using a matcher to protect specific routes
-  matcher: ['/pro-plan', '/dashboard', '/api/upgrade-plan'],
+  matcher: ['/pro-plan'],
 };

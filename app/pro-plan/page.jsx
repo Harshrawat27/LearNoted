@@ -7,15 +7,18 @@ import { useRouter } from 'next/navigation';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 
 export default function ProPlan() {
-  const { data: session, status } = useSession();
+  // const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
-  // Redirect if not logged in
+  // We'll let the middleware handle the unauthenticated case
+  // This is just a safety check
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.push('/login');
+      console.log('Session not found in client component, redirecting...');
+      router.push('/auth/signin?callbackUrl=/pro-plan');
     }
   }, [status, router]);
 
@@ -61,6 +64,7 @@ export default function ProPlan() {
     }
   };
 
+  // Show loading state while checking the session
   if (status === 'loading') {
     return (
       <div className='flex justify-center items-center min-h-screen'>
