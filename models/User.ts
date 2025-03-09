@@ -1,5 +1,3 @@
-// models/User.ts
-
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema(
@@ -21,6 +19,16 @@ const UserSchema = new mongoose.Schema(
       type: String,
       enum: ['free', 'paid'],
       default: 'free',
+    },
+    // New fields for PayPal subscription
+    paypalSubscriptionId: {
+      type: String,
+      default: null,
+    },
+    paypalSubscriptionStatus: {
+      type: String,
+      enum: ['active', 'cancelled', 'suspended', 'payment_failed', null],
+      default: null,
     },
     wordSearchCount: {
       type: Number,
