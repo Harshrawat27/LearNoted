@@ -37,9 +37,11 @@ export default function ProPlanPage() {
     }
   };
 
-  const handleApprove = async (data) => {
+  const handleApprove = async (data, actions) => {
     try {
       setLoading(true);
+      console.log('Payment approved by user, order ID:', data.orderID);
+
       // Send the order ID to your server to validate and update the user's plan
       const response = await fetch('/api/payments/capture', {
         method: 'POST',
@@ -51,19 +53,34 @@ export default function ProPlanPage() {
         }),
       });
 
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Server error response:', errorText);
+        throw new Error(
+          `Server responded with ${response.status}: ${errorText}`
+        );
+      }
+
       const responseData = await response.json();
 
       if (responseData.success) {
+        console.log('Payment successfully processed on the server');
         setUserPlan('paid');
         setPaymentSuccess(true);
         setTimeout(() => {
           router.push('/dashboard');
         }, 3000);
       } else {
-        console.error('Payment verification failed');
+        console.error('Payment verification failed:', responseData.error);
+        alert(
+          'Payment processing failed. Please try again or contact support.'
+        );
       }
     } catch (error) {
       console.error('Error capturing payment:', error);
+      alert(
+        'An error occurred while processing your payment. Please try again later.'
+      );
     } finally {
       setLoading(false);
     }

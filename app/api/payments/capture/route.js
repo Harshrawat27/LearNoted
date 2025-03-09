@@ -18,29 +18,85 @@ async function getPayPalAccessToken() {
     `${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`
   ).toString('base64');
 
-  const response = await fetch(`${base}/v1/oauth2/token`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: `Basic ${auth}`,
-    },
-    body: 'grant_type=client_credentials',
-  });
+  try {
+    const response = await fetch(`${base}/v1/oauth2/token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `Basic ${auth}`,
+      },
+      body: 'grant_type=client_credentials',
+    });
 
-  const data = await response.json();
-  return data.access_token;
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('PayPal token error:', errorData);
+      throw new Error(
+        `Failed to get PayPal token: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const data = await response.json();
+    return data.access_token;
+  } catch (error) {
+    console.error('Error getting PayPal access token:', error);
+    throw error;
+  }
 }
 
 // Function to verify the order
 async function verifyPayPalOrder(orderID, accessToken) {
-  const response = await fetch(`${base}/v2/checkout/orders/${orderID}`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  try {
+    const response = await fetch(`${base}/v2/checkout/orders/${orderID}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
 
-  return await response.json();
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('PayPal order verification error:', errorData);
+      throw new Error(
+        `Failed to verify order: ${response.status} ${response.statusText}`
+      );
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error verifying PayPal order:', error);
+    throw error;
+  }
+}
+
+// Function to capture the order (complete the payment)
+async function capturePayPalOrder(orderID, accessToken) {
+  try {
+    const response = await fetch(
+      `${base}/v2/checkout/orders/${orderID}/capture`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('PayPal capture error:', errorData);
+      throw new Error(
+        `Failed to capture payment: ${response.status} ${response.statusText}`
+      );
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error capturing PayPal payment:', error);
+    throw error;
+  }
 }
 
 export async function POST(request) {
@@ -54,7 +110,8 @@ export async function POST(request) {
       );
     }
 
-    const { orderID } = await request.json();
+    const body = await request.json();
+    const { orderID } = body;
 
     if (!orderID) {
       return NextResponse.json(
@@ -63,47 +120,61 @@ export async function POST(request) {
       );
     }
 
+    console.log(`Processing payment for order: ${orderID}`);
+
     // Get PayPal access token
     const accessToken = await getPayPalAccessToken();
+    console.log('Got PayPal access token');
 
-    // Verify the payment
-    const order = await verifyPayPalOrder(orderID, accessToken);
+    // Verify the order first
+    const orderDetails = await verifyPayPalOrder(orderID, accessToken);
+    console.log('Order verified:', orderDetails.status);
 
-    // Check if payment is completed and the amount is correct
+    // If order is created or approved, capture the payment
     if (
-      order.status === 'COMPLETED' ||
-      (order.status === 'APPROVED' &&
-        order.purchase_units[0].amount.value === '5.00')
+      orderDetails.status === 'CREATED' ||
+      orderDetails.status === 'APPROVED'
     ) {
-      // Update user to paid plan
-      await dbConnect();
-      const user = await User.findOne({ email: session.user.email });
+      const captureResult = await capturePayPalOrder(orderID, accessToken);
+      console.log('Payment captured:', captureResult.status);
 
-      if (!user) {
-        return NextResponse.json(
-          { success: false, error: 'User not found' },
-          { status: 404 }
-        );
+      if (captureResult.status === 'COMPLETED') {
+        // Update user to paid plan
+        await dbConnect();
+        const user = await User.findOne({ email: session.user.email });
+
+        if (!user) {
+          return NextResponse.json(
+            { success: false, error: 'User not found' },
+            { status: 404 }
+          );
+        }
+
+        user.subscriptionPlan = 'paid';
+        await user.save();
+        console.log(`User ${session.user.email} upgraded to paid plan`);
+
+        return NextResponse.json({ success: true });
       }
-
-      user.subscriptionPlan = 'paid';
-      await user.save();
-
-      return NextResponse.json({ success: true });
     }
 
+    // If we get here, the payment wasn't successful
     return NextResponse.json(
       {
         success: false,
         error: 'Payment verification failed',
-        orderStatus: order.status,
+        orderStatus: orderDetails.status,
       },
       { status: 400 }
     );
   } catch (error) {
-    console.error('Error capturing payment:', error);
+    console.error('Error processing payment:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to capture payment' },
+      {
+        success: false,
+        error: 'Failed to process payment',
+        message: error.message,
+      },
       { status: 500 }
     );
   }
