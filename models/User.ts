@@ -1,4 +1,4 @@
-// models/user.ts
+// models/User.ts
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema(
@@ -53,7 +53,5 @@ UserSchema.methods.incrementWordSearch = function () {
   }
 };
 
-// Use this approach for Next.js to handle model compilation across hot reloads
 const User = mongoose.models.User || mongoose.model('User', UserSchema);
-
 export { User };

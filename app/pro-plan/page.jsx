@@ -1,215 +1,173 @@
-// app/pro-plan/page.jsx
 'use client';
 
-import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { useRouter } from 'next/navigation';
-import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
+import Link from 'next/link';
 
-export default function ProPlan() {
+export default function ProPlanPage() {
   const { data: session, status } = useSession();
+  const [userPlan, setUserPlan] = useState('free');
+  const [loading, setLoading] = useState(true);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
 
-  // Check authentication status
   useEffect(() => {
-    // If authentication check is complete and user is not authenticated
-    if (status === 'unauthenticated') {
-      router.push('/auth/signin?callbackUrl=/pro-plan');
+    // Fetch user's current plan
+    if (status === 'authenticated') {
+      fetchUserPlan();
+    } else if (status === 'unauthenticated') {
+      setLoading(false);
     }
-  }, [status, router]);
+  }, [status]);
 
-  const handlePaymentSuccess = async (details) => {
+  const fetchUserPlan = async () => {
+    try {
+      const response = await fetch('/api/user/plan');
+      const data = await response.json();
+
+      if (data.success) {
+        setUserPlan(data.plan);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching user plan:', error);
+      setLoading(false);
+    }
+  };
+
+  const handleApprove = async (data) => {
     try {
       setLoading(true);
-
-      // Send payment details to your API to update user subscription
-      const response = await fetch('/api/upgrade-plan', {
+      // Send the order ID to your server to validate and update the user's plan
+      const response = await fetch('/api/payments/capture', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          paymentId: details.id,
-          paymentStatus: details.status,
-          payerEmail: details.payer.email_address,
+          orderID: data.orderID,
         }),
       });
 
-      const data = await response.json();
+      const responseData = await response.json();
 
-      if (response.ok) {
-        setMessage('Subscription successful! Redirecting to dashboard...');
-        // Redirect to dashboard after 2 seconds
+      if (responseData.success) {
+        setUserPlan('paid');
+        setPaymentSuccess(true);
         setTimeout(() => {
           router.push('/dashboard');
-        }, 2000);
+        }, 3000);
       } else {
-        setMessage(
-          `Error: ${
-            data.message || 'Payment successful but subscription update failed.'
-          }`
-        );
+        console.error('Payment verification failed');
       }
     } catch (error) {
-      console.error('Error processing payment:', error);
-      setMessage(
-        'Payment was successful, but we encountered an error updating your account.'
-      );
+      console.error('Error capturing payment:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  // If still checking authentication status, show loading
-  if (status === 'loading') {
-    return (
-      <div className='flex justify-center items-center min-h-screen'>
-        Loading...
-      </div>
-    );
+  if (loading) {
+    return <div className='container mx-auto p-8 text-center'>Loading...</div>;
   }
 
-  // If authentication check is complete and user is not authenticated, don't render the page content
-  // The useEffect will handle the redirect
   if (status === 'unauthenticated') {
     return (
-      <div className='flex justify-center items-center min-h-screen'>
-        Redirecting to login...
+      <div className='container mx-auto p-8 text-center'>
+        <h1 className='text-3xl font-bold mb-4'>Upgrade to Pro Plan</h1>
+        <p className='mb-4'>Please sign in to upgrade your account.</p>
+        <Link
+          href='/api/auth/signin'
+          className='bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded'
+        >
+          Sign In
+        </Link>
       </div>
     );
   }
 
-  // User is authenticated, render the page content
+  if (userPlan === 'paid') {
+    return (
+      <div className='container mx-auto p-8 text-center'>
+        <h1 className='text-3xl font-bold mb-4'>Pro Plan</h1>
+        <div className='bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4'>
+          You are already a Pro user! Enjoy unlimited searches.
+        </div>
+        <Link
+          href='/dashboard'
+          className='bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded'
+        >
+          Go to Dashboard
+        </Link>
+      </div>
+    );
+  }
+
+  if (paymentSuccess) {
+    return (
+      <div className='container mx-auto p-8 text-center'>
+        <h1 className='text-3xl font-bold mb-4'>Thank You!</h1>
+        <div className='bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4'>
+          Your payment was successful! You now have access to unlimited
+          searches.
+        </div>
+        <p>Redirecting to dashboard...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className='min-h-screen bg-gray-50'>
-      <main className='max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8'>
-        <div className='bg-white shadow rounded-lg overflow-hidden'>
-          <div className='px-6 py-8'>
-            <h2 className='text-2xl font-bold text-gray-900 text-center'>
-              Upgrade to Pro Plan
-            </h2>
-            <p className='mt-2 text-center text-gray-600'>
-              Unlock unlimited word searches for just $5
-            </p>
+    <div className='container mx-auto p-8'>
+      <h1 className='text-3xl font-bold mb-4 text-center'>
+        Upgrade to Pro Plan
+      </h1>
 
-            {/* Display logged-in user info */}
-            {session && session.user && (
-              <div className='mt-4 text-center text-sm text-gray-500'>
-                Logged in as: {session.user.email}
-              </div>
-            )}
+      <div className='max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden mb-8'>
+        <div className='p-6'>
+          <h2 className='text-xl font-semibold mb-4'>Pro Plan - $5.00</h2>
+          <ul className='list-disc list-inside mb-4 space-y-2'>
+            <li>Unlimited word searches</li>
+            <li>One-time payment</li>
+            <li>No recurring fees</li>
+            <li>Lifetime access</li>
+          </ul>
 
-            <div className='mt-8 space-y-4'>
-              <div className='border border-gray-200 rounded-md p-4'>
-                <h3 className='text-lg font-medium text-gray-900'>
-                  Pro Plan Benefits:
-                </h3>
-                <ul className='mt-4 space-y-2'>
-                  <li className='flex items-start'>
-                    <svg
-                      className='h-5 w-5 text-green-500 mr-2'
-                      fill='none'
-                      stroke='currentColor'
-                      viewBox='0 0 24 24'
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth={2}
-                        d='M5 13l4 4L19 7'
-                      />
-                    </svg>
-                    <span>Unlimited word searches</span>
-                  </li>
-                  <li className='flex items-start'>
-                    <svg
-                      className='h-5 w-5 text-green-500 mr-2'
-                      fill='none'
-                      stroke='currentColor'
-                      viewBox='0 0 24 24'
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth={2}
-                        d='M5 13l4 4L19 7'
-                      />
-                    </svg>
-                    <span>Priority support</span>
-                  </li>
-                  <li className='flex items-start'>
-                    <svg
-                      className='h-5 w-5 text-green-500 mr-2'
-                      fill='none'
-                      stroke='currentColor'
-                      viewBox='0 0 24 24'
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth={2}
-                        d='M5 13l4 4L19 7'
-                      />
-                    </svg>
-                    <span>One-time payment (not subscription)</span>
-                  </li>
-                </ul>
-              </div>
-
-              {message && (
-                <div
-                  className={`p-4 rounded-md ${
-                    message.includes('Error')
-                      ? 'bg-red-50 text-red-700'
-                      : 'bg-green-50 text-green-700'
-                  }`}
-                >
-                  {message}
-                </div>
-              )}
-
-              <div className='pt-4'>
-                <PayPalScriptProvider
-                  options={{
-                    'client-id': process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
-                    currency: 'USD',
-                  }}
-                >
-                  <PayPalButtons
-                    disabled={loading}
-                    createOrder={(data, actions) => {
-                      return actions.order.create({
-                        purchase_units: [
-                          {
-                            description: 'Pro Plan Upgrade',
-                            amount: {
-                              value: '5.00',
-                              currency_code: 'USD',
-                            },
-                          },
-                        ],
-                      });
-                    }}
-                    onApprove={async (data, actions) => {
-                      // Capture the funds from the transaction
-                      const details = await actions.order.capture();
-                      // Call your backend to process the payment and update subscription
-                      handlePaymentSuccess(details);
-                    }}
-                    onError={(err) => {
-                      console.error('PayPal Error:', err);
-                      setMessage('Payment failed. Please try again later.');
-                    }}
-                    style={{ layout: 'vertical' }}
-                  />
-                </PayPalScriptProvider>
-              </div>
-            </div>
+          <div className='mt-6'>
+            <PayPalScriptProvider
+              options={{
+                'client-id': process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
+                currency: 'USD',
+              }}
+            >
+              <PayPalButtons
+                style={{ layout: 'vertical' }}
+                createOrder={(data, actions) => {
+                  return actions.order.create({
+                    purchase_units: [
+                      {
+                        amount: {
+                          value: '5.00',
+                          currency_code: 'USD',
+                        },
+                        description: 'Pro Plan - Unlimited Searches',
+                      },
+                    ],
+                  });
+                }}
+                onApprove={handleApprove}
+              />
+            </PayPalScriptProvider>
           </div>
         </div>
-      </main>
+      </div>
+
+      <div className='text-center'>
+        <Link href='/dashboard' className='text-blue-500 hover:underline'>
+          Return to Dashboard
+        </Link>
+      </div>
     </div>
   );
 }
