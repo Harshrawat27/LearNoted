@@ -2,9 +2,24 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
+import {
+  PayPalCreateActions,
+  PayPalOnApproveData,
+  PayPalOnApproveActions,
+} from '../../app/types/paypal-types';
 
 interface PayPalButtonProps {
   onSubscriptionSuccess?: () => void;
+}
+
+// PayPal Error type
+interface PayPalError {
+  message: string;
+  name?: string;
+  details?: Array<{
+    issue: string;
+    description: string;
+  }>;
 }
 
 export default function CleanPayPalButton({
@@ -53,12 +68,18 @@ export default function CleanPayPalButton({
                 layout: 'vertical',
                 label: 'subscribe',
               },
-              createSubscription: function (data: any, actions: any) {
+              createSubscription: function (
+                data: Record<string, unknown>,
+                actions: PayPalCreateActions
+              ) {
                 return actions.subscription.create({
                   plan_id: 'P-69Y245349R6371427M7F73CQ',
                 });
               },
-              onApprove: async function (data: any) {
+              onApprove: async function (
+                data: PayPalOnApproveData,
+                actions: PayPalOnApproveActions
+              ) {
                 console.log('Subscription approved:', data);
                 setIsProcessing(true);
 
@@ -97,7 +118,7 @@ export default function CleanPayPalButton({
                   setIsProcessing(false);
                 }
               },
-              onError: function (err: any) {
+              onError: function (err: PayPalError) {
                 console.error('PayPal button error:', err);
                 setError('An error occurred with the payment processing');
               },
@@ -181,11 +202,4 @@ export default function CleanPayPalButton({
       </div>
     </div>
   );
-}
-
-// Add TypeScript definitions for PayPal
-declare global {
-  interface Window {
-    paypal: any;
-  }
 }
