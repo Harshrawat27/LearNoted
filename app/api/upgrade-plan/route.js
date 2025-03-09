@@ -19,7 +19,8 @@ export async function POST(request) {
 
     // Parse request body
     const body = await request.json();
-    const { paymentId, paymentStatus } = body;
+    //  const { paymentId, paymentStatus } = body;
+    const { paymentStatus } = body;
 
     // Validate payment status
     if (paymentStatus !== 'COMPLETED') {
