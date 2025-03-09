@@ -1,3 +1,4 @@
+// models/user.ts
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema(
@@ -19,16 +20,6 @@ const UserSchema = new mongoose.Schema(
       type: String,
       enum: ['free', 'paid'],
       default: 'free',
-    },
-    // New fields for PayPal subscription
-    paypalSubscriptionId: {
-      type: String,
-      default: null,
-    },
-    paypalSubscriptionStatus: {
-      type: String,
-      enum: ['active', 'cancelled', 'suspended', 'payment_failed', null],
-      default: null,
     },
     wordSearchCount: {
       type: Number,
@@ -62,6 +53,7 @@ UserSchema.methods.incrementWordSearch = function () {
   }
 };
 
-// Replace existing export with:
+// Use this approach for Next.js to handle model compilation across hot reloads
 const User = mongoose.models.User || mongoose.model('User', UserSchema);
+
 export { User };
