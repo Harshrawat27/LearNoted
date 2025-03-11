@@ -57,7 +57,9 @@ async function getPayPalAccessToken() {
       data = JSON.parse(textResponse);
     } catch (parseError) {
       console.error('Failed to parse PayPal response as JSON:', textResponse);
-      throw new Error(`Invalid response from PayPal: ${textResponse}`);
+      throw new Error(
+        `Invalid response from PayPal: ${textResponse} ${parseError}`
+      );
     }
 
     if (!response.ok) {
@@ -102,7 +104,9 @@ async function verifyPayPalOrder(orderID, accessToken) {
       data = JSON.parse(textResponse);
     } catch (parseError) {
       console.error('Failed to parse PayPal verify response:', textResponse);
-      throw new Error(`Invalid response from PayPal verify: ${textResponse}`);
+      throw new Error(
+        `Invalid response from PayPal verify: ${textResponse} ${parseError}`
+      );
     }
 
     if (!response.ok) {
@@ -146,7 +150,9 @@ async function capturePayPalOrder(orderID, accessToken) {
       data = JSON.parse(textResponse);
     } catch (parseError) {
       console.error('Failed to parse PayPal capture response:', textResponse);
-      throw new Error(`Invalid response from PayPal capture: ${textResponse}`);
+      throw new Error(
+        `Invalid response from PayPal capture: ${textResponse} ${parseError}`
+      );
     }
 
     if (!response.ok) {
