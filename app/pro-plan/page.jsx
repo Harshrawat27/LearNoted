@@ -10,7 +10,9 @@ export default function ProPlanPage() {
   const { data: session, status } = useSession();
   const [userPlan, setUserPlan] = useState('free');
   const [loading, setLoading] = useState(true);
+  const [paymentLoading, setPaymentLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [paymentError, setPaymentError] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -37,9 +39,28 @@ export default function ProPlanPage() {
     }
   };
 
+  const createOrder = (data, actions) => {
+    console.log('Creating PayPal order...');
+    return actions.order.create({
+      purchase_units: [
+        {
+          amount: {
+            value: '5.00',
+            currency_code: 'USD',
+          },
+          description: 'Pro Plan - Unlimited Searches',
+        },
+      ],
+      application_context: {
+        shipping_preference: 'NO_SHIPPING',
+      },
+    });
+  };
+
   const handleApprove = async (data, actions) => {
     try {
-      setLoading(true);
+      setPaymentLoading(true);
+      setPaymentError(null);
       console.log('Payment approved by user, order ID:', data.orderID);
 
       // Send the order ID to your server to validate and update the user's plan
@@ -53,15 +74,13 @@ export default function ProPlanPage() {
         }),
       });
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Server error response:', errorText);
-        throw new Error(
-          `Server responded with ${response.status}: ${errorText}`
-        );
-      }
-
       const responseData = await response.json();
+
+      if (!response.ok) {
+        console.error('Server error response:', responseData);
+        setPaymentError(responseData.error || 'Payment processing failed');
+        return;
+      }
 
       if (responseData.success) {
         console.log('Payment successfully processed on the server');
@@ -72,18 +91,22 @@ export default function ProPlanPage() {
         }, 3000);
       } else {
         console.error('Payment verification failed:', responseData.error);
-        alert(
-          'Payment processing failed. Please try again or contact support.'
-        );
+        setPaymentError(responseData.error || 'Payment verification failed');
       }
     } catch (error) {
       console.error('Error capturing payment:', error);
-      alert(
+      setPaymentError(
         'An error occurred while processing your payment. Please try again later.'
       );
     } finally {
-      setLoading(false);
+      setPaymentLoading(false);
     }
+  };
+
+  const handleError = (err) => {
+    console.error('PayPal error:', err);
+    setPaymentError('There was a problem with PayPal. Please try again later.');
+    setPaymentLoading(false);
   };
 
   if (loading) {
@@ -151,32 +174,44 @@ export default function ProPlanPage() {
             <li>Lifetime access</li>
           </ul>
 
+          {paymentError && (
+            <div className='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4'>
+              {paymentError}
+            </div>
+          )}
+
           <div className='mt-6'>
-            <PayPalScriptProvider
-              options={{
-                'client-id':
-                  'AQSgOvOVSPVWI4pdNf1iKaEBfvzbCB4lX_fcIofql_h11iBBGqshpuJH5xbsrlU6Rxl8cs_vnWsQ8t4H',
-                currency: 'USD',
-              }}
-            >
-              <PayPalButtons
-                style={{ layout: 'vertical' }}
-                createOrder={(data, actions) => {
-                  return actions.order.create({
-                    purchase_units: [
-                      {
-                        amount: {
-                          value: '5.00',
-                          currency_code: 'USD',
-                        },
-                        description: 'Pro Plan - Unlimited Searches',
-                      },
-                    ],
-                  });
+            {paymentLoading ? (
+              <div className='text-center py-4'>
+                <p>Processing payment...</p>
+              </div>
+            ) : (
+              <PayPalScriptProvider
+                options={{
+                  'client-id':
+                    'AQSgOvOVSPVWI4pdNf1iKaEBfvzbCB4lX_fcIofql_h11iBBGqshpuJH5xbsrlU6Rxl8cs_vnWsQ8t4H',
+                  currency: 'USD',
+                  // Set to 'sandbox' for testing
+                  // Make sure this matches your backend environment setting
+                  intent: 'capture',
+                  'enable-funding': 'card,venmo',
+                  'disable-funding': 'paylater,credit',
                 }}
-                onApprove={handleApprove}
-              />
-            </PayPalScriptProvider>
+              >
+                <PayPalButtons
+                  style={{
+                    layout: 'vertical',
+                    color: 'blue',
+                    shape: 'rect',
+                    label: 'pay',
+                  }}
+                  createOrder={createOrder}
+                  onApprove={handleApprove}
+                  onError={handleError}
+                  onCancel={() => console.log('Payment cancelled by user')}
+                />
+              </PayPalScriptProvider>
+            )}
           </div>
         </div>
       </div>
