@@ -13,7 +13,13 @@ export default function ProPlanPage() {
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentError, setPaymentError] = useState(null);
+  const [paypalReady, setPaypalReady] = useState(false);
+  const [debugInfo, setDebugInfo] = useState(null);
   const router = useRouter();
+
+  // PayPal client ID - hardcoded for now, but ideally should come from environment
+  const PAYPAL_CLIENT_ID =
+    'AQSgOvOVSPVWI4pdNf1iKaEBfvzbCB4lX_fcIofql_h11iBBGqshpuJH5xbsrlU6Rxl8cs_vnWsQ8t4H';
 
   useEffect(() => {
     // Fetch user's current plan
@@ -61,6 +67,7 @@ export default function ProPlanPage() {
     try {
       setPaymentLoading(true);
       setPaymentError(null);
+      setDebugInfo(null);
       console.log('Payment approved by user, order ID:', data.orderID);
 
       // Send the order ID to your server to validate and update the user's plan
@@ -74,11 +81,37 @@ export default function ProPlanPage() {
         }),
       });
 
-      const responseData = await response.json();
+      // Store the full response text for debugging
+      const responseText = await response.text();
+      console.log('Full server response:', responseText);
+
+      // Try to parse the response as JSON
+      let responseData;
+      try {
+        responseData = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('Error parsing response:', parseError);
+        setPaymentError(
+          'Server returned an invalid response. Please contact support.'
+        );
+        setDebugInfo({
+          statusCode: response.status,
+          responseText: responseText,
+        });
+        return;
+      }
 
       if (!response.ok) {
         console.error('Server error response:', responseData);
         setPaymentError(responseData.error || 'Payment processing failed');
+
+        // Include detailed debug info
+        setDebugInfo({
+          statusCode: response.status,
+          error: responseData.error,
+          details: responseData.details || responseData.message,
+          orderID: data.orderID,
+        });
         return;
       }
 
@@ -92,12 +125,17 @@ export default function ProPlanPage() {
       } else {
         console.error('Payment verification failed:', responseData.error);
         setPaymentError(responseData.error || 'Payment verification failed');
+        setDebugInfo(responseData);
       }
     } catch (error) {
       console.error('Error capturing payment:', error);
       setPaymentError(
         'An error occurred while processing your payment. Please try again later.'
       );
+      setDebugInfo({
+        clientError: error.message,
+        stack: error.stack,
+      });
     } finally {
       setPaymentLoading(false);
     }
@@ -107,6 +145,9 @@ export default function ProPlanPage() {
     console.error('PayPal error:', err);
     setPaymentError('There was a problem with PayPal. Please try again later.');
     setPaymentLoading(false);
+    setDebugInfo({
+      paypalError: err,
+    });
   };
 
   if (loading) {
@@ -176,28 +217,49 @@ export default function ProPlanPage() {
 
           {paymentError && (
             <div className='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4'>
-              {paymentError}
+              <p className='font-bold'>Error:</p>
+              <p>{paymentError}</p>
+              {debugInfo && (
+                <details className='mt-2 text-xs'>
+                  <summary>Technical Details (for Support)</summary>
+                  <pre className='mt-1 whitespace-pre-wrap'>
+                    {JSON.stringify(debugInfo, null, 2)}
+                  </pre>
+                </details>
+              )}
             </div>
           )}
 
           <div className='mt-6'>
             {paymentLoading ? (
-              <div className='text-center py-4'>
+              <div className='text-center py-4 space-y-2'>
                 <p>Processing payment...</p>
+                <div className='w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto'></div>
               </div>
             ) : (
               <PayPalScriptProvider
                 options={{
-                  'client-id':
-                    'AQSgOvOVSPVWI4pdNf1iKaEBfvzbCB4lX_fcIofql_h11iBBGqshpuJH5xbsrlU6Rxl8cs_vnWsQ8t4H',
+                  'client-id': PAYPAL_CLIENT_ID,
                   currency: 'USD',
-                  // Set to 'sandbox' for testing
-                  // Make sure this matches your backend environment setting
-                  intent: 'capture',
-                  'enable-funding': 'card,venmo',
+                  // Always use sandbox for easier debugging
+                  'enable-funding': 'card',
                   'disable-funding': 'paylater,credit',
+                  components: 'buttons',
+                  intent: 'capture',
+                  debug: true,
+                }}
+                onInit={() => setPaypalReady(true)}
+                onError={(err) => {
+                  console.error('PayPal script error:', err);
+                  setPaymentError('Failed to load payment processor');
                 }}
               >
+                {!paypalReady && (
+                  <div className='text-center py-4'>
+                    <p>Loading payment options...</p>
+                    <div className='w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mt-2'></div>
+                  </div>
+                )}
                 <PayPalButtons
                   style={{
                     layout: 'vertical',
@@ -212,6 +274,17 @@ export default function ProPlanPage() {
                 />
               </PayPalScriptProvider>
             )}
+          </div>
+
+          {/* Debug info for PayPal ClientID */}
+          <div className='mt-4 text-xs text-gray-500'>
+            <details>
+              <summary>Payment configuration</summary>
+              <p className='mt-1'>
+                Using PayPal Client ID: {PAYPAL_CLIENT_ID.substring(0, 10)}...
+                {PAYPAL_CLIENT_ID.substring(PAYPAL_CLIENT_ID.length - 5)}
+              </p>
+            </details>
           </div>
         </div>
       </div>
