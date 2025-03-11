@@ -182,3 +182,5 @@ export default function SubscriptionPlan() {
     </div>
   );
 }
+
+// updating environment variable to live
