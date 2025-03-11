@@ -49,7 +49,7 @@ export default function SubscriptionPlan() {
             },
             createSubscription: function (data, actions) {
               return actions.subscription.create({
-                plan_id: 'P-3G3711933W673370UM7H6XEY',
+                plan_id: 'P-69Y245349R6371427M7F73CQ',
               });
             },
             onApprove: async function (data, actions) {
