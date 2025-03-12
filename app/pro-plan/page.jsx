@@ -21,8 +21,7 @@ export default function ProPlanPage() {
   const router = useRouter();
 
   // PayPal client ID - hardcoded for now, but ideally should come from environment
-  const PAYPAL_CLIENT_ID =
-    'AQSgOvOVSPVWI4pdNf1iKaEBfvzbCB4lX_fcIofql_h11iBBGqshpuJH5xbsrlU6Rxl8cs_vnWsQ8t4H';
+  const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
 
   useEffect(() => {
     // Fetch user's current plan
