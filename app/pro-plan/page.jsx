@@ -21,7 +21,7 @@ export default function ProPlanPage() {
   const router = useRouter();
 
   // PayPal client ID - hardcoded for now, but ideally should come from environment
-  const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;
+  const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID || '';
   useEffect(() => {
     // Fetch user's current plan
     if (status === 'authenticated') {
@@ -415,16 +415,28 @@ export default function ProPlanPage() {
                 )}
               </div>
 
-              {/* Debug info for PayPal ClientID */}
+              {/* Debug info for PayPal ClientID - Fixed to handle undefined case */}
               <div className='mt-4 text-xs text-gray-400 dark:text-gray-500'>
                 <details>
                   <summary className='cursor-pointer hover:underline'>
                     Payment configuration
                   </summary>
                   <p className='mt-1'>
-                    Using PayPal Client ID: {PAYPAL_CLIENT_ID.substring(0, 10)}
-                    ...
-                    {PAYPAL_CLIENT_ID.substring(PAYPAL_CLIENT_ID.length - 5)}
+                    {PAYPAL_CLIENT_ID ? (
+                      <>
+                        Using PayPal Client ID:{' '}
+                        {PAYPAL_CLIENT_ID.substring(0, 10)}
+                        ...
+                        {PAYPAL_CLIENT_ID.substring(
+                          PAYPAL_CLIENT_ID.length - 5
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        PayPal Client ID not found. Please check your
+                        environment variables.
+                      </>
+                    )}
                   </p>
                 </details>
               </div>
