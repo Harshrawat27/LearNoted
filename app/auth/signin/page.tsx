@@ -25,8 +25,8 @@ function SignInComponent() {
         <header className='flex items-center justify-between py-4 mb-8'>
           <Link href='/' className='flex items-center gap-2'>
             <Image
-              src='/logo.png'
-              alt='AI Extension Logo'
+              src='/learnoted-logo-white.svg'
+              alt='Learnoted Logo'
               width={40}
               height={40}
               className='rounded-full'

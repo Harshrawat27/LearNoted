@@ -11,13 +11,13 @@ export default function PricingPage() {
         {/* Header */}
         <header className='flex items-center justify-between py-4 mb-12'>
           <Link href='/' className='flex items-center gap-2'>
-            {/* <Image
-              src='/logo.png' 
-              alt='AI Extension Logo'
+            <Image
+              src='/learnoted-logo-white.svg'
+              alt='Learnoted Logo'
               width={40}
               height={40}
               className='rounded-full'
-            /> */}
+            />
             <h1 className='text-2xl font-bold text-gray-800 dark:text-white'>
               LearNoted
             </h1>
@@ -75,10 +75,11 @@ export default function PricingPage() {
                 </li>
               ))}
             </ul>
-
-            <button className='mt-auto w-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-medium py-3 px-6 rounded-xl transition-colors'>
-              Get Started
-            </button>
+            <Link className='mt-auto' href='/auth/signin'>
+              <button className='w-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-medium py-3 px-6 rounded-xl transition-colors'>
+                Get Started
+              </button>
+            </Link>
           </div>
 
           {/* Pro Plan */}
@@ -125,10 +126,11 @@ export default function PricingPage() {
                 </li>
               ))}
             </ul>
-
-            <button className='mt-auto w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-6 rounded-xl shadow-lg transition-colors'>
-              Upgrade Now
-            </button>
+            <Link href='/pro-plan'>
+              <button className='mt-auto w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-6 rounded-xl shadow-lg transition-colors'>
+                Upgrade Now
+              </button>
+            </Link>
           </div>
         </main>
 
@@ -200,8 +202,8 @@ export default function PricingPage() {
           <div className='flex flex-col md:flex-row justify-between items-center'>
             <div className='flex items-center gap-2 mb-4 md:mb-0'>
               <Image
-                src='/logo.png'
-                alt='AI Extension Logo'
+                src='/learnoted-logo-white.svg'
+                alt='learnoted Logo'
                 width={32}
                 height={32}
                 className='rounded-full'

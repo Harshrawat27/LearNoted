@@ -50,8 +50,8 @@ export default function AuthSuccess() {
           </div>
 
           <Image
-            src='/logo.png'
-            alt='AI Extension Logo'
+            src='/learnoted-logo-white.svg'
+            alt='Learnoted Logo'
             width={60}
             height={60}
             className='rounded-full mb-4'

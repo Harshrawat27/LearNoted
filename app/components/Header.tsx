@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-// import Image from 'next/image';
+import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 // No Button import needed
 
@@ -13,15 +13,15 @@ export default function Header() {
   return (
     <header className='flex items-center justify-between py-4 px-6 row-start-1 border-b border-gray-200 dark:border-gray-800'>
       <div className='flex items-center gap-2'>
-        {/* <Image
-          src='/logo.png'  Replace with your own logo image 
+        <Image
+          src='/learnoted-logo-white.svg'
           alt='AI Extension Logo'
-          width={40}
-          height={40}
+          width={50}
+          height={50}
           className='rounded-full'
-        />  */}
+        />
         <h1 className='text-2xl font-bold text-gray-800 dark:text-white'>
-          LearNoted
+          Lear<span className='text-purple-500'>Noted</span>
         </h1>
       </div>
 
