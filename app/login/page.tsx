@@ -32,7 +32,7 @@ function SignInComponent() {
               className='rounded-full'
             />
             <h1 className='text-2xl font-bold text-gray-800 dark:text-white'>
-              AI Extension
+              LearNoted
             </h1>
           </Link>
         </header>
@@ -99,7 +99,7 @@ function SignInComponent() {
 
           <div className='mt-8 text-center'>
             <p className='text-gray-600 dark:text-gray-300'>
-              Don't have an account yet?{' '}
+              Don&apos;t have an account yet?{' '}
               <Link
                 href='/signup'
                 className='text-purple-600 dark:text-purple-400 font-medium hover:underline'

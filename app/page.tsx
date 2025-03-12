@@ -9,7 +9,7 @@ import { HighlighterIcon, Search, Chrome, BookOpen, Brain } from 'lucide-react';
 export default function HomePage() {
   const [email, setEmail] = useState('');
 
-  const handleSubscribe = (e: any) => {
+  const handleSubscribe = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Handle subscription logic here
     alert(`Subscribed with email: ${email}`);
@@ -307,7 +307,8 @@ export default function HomePage() {
                       </svg>
                     </div>
                     <span className='text-gray-700 dark:text-gray-300'>
-                      Lightweight extension that won't slow down your browser
+                      Lightweight extension that won&apos;t slow down your
+                      browser{' '}
                     </span>
                   </li>
                 </ul>

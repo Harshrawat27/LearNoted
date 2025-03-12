@@ -30,8 +30,8 @@ export default function PricingPage() {
             Choose Your Plan
           </h2>
           <p className='text-lg sm:text-xl text-gray-600 dark:text-gray-300'>
-            Whether you're just exploring or a power user, we have a plan that
-            fits your needs.
+            Whether you&apos;re just exploring or a power user, we have a plan
+            that fits your needs.
           </p>
         </section>
 
