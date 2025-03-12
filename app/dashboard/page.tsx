@@ -5,6 +5,8 @@ import { authOptions } from '../lib/authOptions';
 import dbConnect from '../lib/dbConnect';
 import { User } from '@/models/User';
 import ProfilePageClient from './ProfilePageClient';
+import { Suspense } from 'react';
+import ProfileLoading from './loading';
 
 export default async function ProfilePage() {
   // 1. Check session (server-side)
@@ -23,5 +25,9 @@ export default async function ProfilePage() {
   }
 
   // 4. Render client component with user data
-  return <ProfilePageClient user={JSON.parse(JSON.stringify(userDoc))} />;
+  return (
+    <Suspense fallback={<ProfileLoading />}>
+      <ProfilePageClient user={JSON.parse(JSON.stringify(userDoc))} />
+    </Suspense>
+  );
 }

@@ -5,6 +5,8 @@ import dbConnect from '../../lib/dbConnect'; // Adjust path as needed
 import { Video } from '../../../models/YoutubeHighlight';
 import { User } from '@/models/User';
 import YouTubeHighlightsPageClient from './YouTubeHighlightsPageClient';
+import { Suspense } from 'react';
+import YoutubeLoading from './loading';
 
 export default async function YouTubeHighlightsPage() {
   // 1. Check session (server-side)
@@ -34,9 +36,11 @@ export default async function YouTubeHighlightsPage() {
   });
 
   return (
-    <YouTubeHighlightsPageClient
-      initialHighlights={JSON.parse(JSON.stringify(initialHighlights))}
-      totalCount={totalHighlights}
-    />
+    <Suspense fallback={<YoutubeLoading />}>
+      <YouTubeHighlightsPageClient
+        initialHighlights={JSON.parse(JSON.stringify(initialHighlights))}
+        totalCount={totalHighlights}
+      />
+    </Suspense>
   );
 }
