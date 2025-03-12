@@ -366,56 +366,45 @@ export default function ProPlanPage() {
               )}
               // Updated PayPal buttons section:
               <div className='mt-6'>
-                {paymentLoading ? (
-                  <div className='text-center py-6 space-y-3'>
-                    <Loader2 className='h-8 w-8 text-purple-600 dark:text-purple-400 animate-spin mx-auto' />
-                    <p className='text-gray-600 dark:text-gray-300'>
-                      Processing payment...
-                    </p>
-                  </div>
-                ) : (
-                  <PayPalScriptProvider
-                    options={{
-                      'client-id': PAYPAL_CLIENT_ID,
-                      currency: 'USD',
-                      // Always use sandbox for easier debugging
-                      'enable-funding': 'card',
-                      'disable-funding': 'paylater,credit',
-                      components: 'buttons',
-                      intent: 'capture',
-                      debug: true,
-                    }}
-                    onInit={() => setPaypalReady(true)}
-                    onError={(err) => {
-                      console.error('PayPal script error:', err);
-                      setPaymentError('Failed to load payment processor');
-                    }}
-                  >
-                    {!paypalReady ? (
-                      <div className='text-center py-6 space-y-3'>
-                        <Loader2 className='h-8 w-8 text-purple-600 dark:text-purple-400 animate-spin mx-auto' />
-                        <p className='text-gray-600 dark:text-gray-300'>
-                          Loading payment options...
-                        </p>
-                      </div>
-                    ) : (
-                      <PayPalButtons
-                        style={{
-                          layout: 'vertical',
-                          color: 'blue',
-                          shape: 'rect',
-                          label: 'pay',
-                        }}
-                        createOrder={createOrder}
-                        onApprove={handleApprove}
-                        onError={handleError}
-                        onCancel={() =>
-                          console.log('Payment cancelled by user')
-                        }
-                      />
-                    )}
-                  </PayPalScriptProvider>
-                )}
+                <PayPalScriptProvider
+                  options={{
+                    'client-id': PAYPAL_CLIENT_ID,
+                    currency: 'USD',
+                    // Always use sandbox for easier debugging
+                    'enable-funding': 'card',
+                    'disable-funding': 'paylater,credit',
+                    components: 'buttons',
+                    intent: 'capture',
+                    debug: true,
+                  }}
+                  onInit={() => setPaypalReady(true)}
+                  onError={(err) => {
+                    console.error('PayPal script error:', err);
+                    setPaymentError('Failed to load payment processor');
+                  }}
+                >
+                  {!paypalReady ? (
+                    <div className='text-center py-6 space-y-3'>
+                      <Loader2 className='h-8 w-8 text-purple-600 dark:text-purple-400 animate-spin mx-auto' />
+                      <p className='text-gray-600 dark:text-gray-300'>
+                        Loading payment options...
+                      </p>
+                    </div>
+                  ) : (
+                    <PayPalButtons
+                      style={{
+                        layout: 'vertical',
+                        color: 'blue',
+                        shape: 'rect',
+                        label: 'pay',
+                      }}
+                      createOrder={createOrder}
+                      onApprove={handleApprove}
+                      onError={handleError}
+                      onCancel={() => console.log('Payment cancelled by user')}
+                    />
+                  )}
+                </PayPalScriptProvider>
               </div>
               {/* Debug info for PayPal ClientID */}
               <div className='mt-4 text-xs text-gray-400 dark:text-gray-500'>
