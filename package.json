@@ -11,9 +11,12 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@paypal/react-paypal-js": "^8.8.2",
+    "@radix-ui/react-slot": "^1.1.2",
     "@types/mongoose": "^5.11.97",
     "axios": "^1.7.9",
     "chart.js": "^4.4.7",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "crypto": "^1.0.1",
     "framer-motion": "^12.4.7",
     "jsonwebtoken": "^9.0.2",
@@ -34,6 +37,7 @@
     "react-hot-toast": "^2.5.2",
     "react-intersection-observer": "^9.15.1",
     "recharts": "^2.15.1",
+    "tailwind-merge": "^3.0.2",
     "zod": "^3.24.2"
   },
   "devDependencies": {
