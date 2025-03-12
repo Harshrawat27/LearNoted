@@ -326,7 +326,6 @@ export default function ProPlanPage() {
                   Pro Plan - $5.00
                 </h2>
               </div>
-
               <ul className='space-y-3 mb-6'>
                 {[
                   'Unlimited word searches',
@@ -344,7 +343,6 @@ export default function ProPlanPage() {
                   </li>
                 ))}
               </ul>
-
               {paymentError && (
                 <div className='bg-red-100 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-300 px-4 py-4 rounded-xl mb-6'>
                   <div className='flex items-start'>
@@ -366,7 +364,7 @@ export default function ProPlanPage() {
                   </div>
                 </div>
               )}
-
+              // Updated PayPal buttons section:
               <div className='mt-6'>
                 {paymentLoading ? (
                   <div className='text-center py-6 space-y-3'>
@@ -393,30 +391,32 @@ export default function ProPlanPage() {
                       setPaymentError('Failed to load payment processor');
                     }}
                   >
-                    {!paypalReady && (
+                    {!paypalReady ? (
                       <div className='text-center py-6 space-y-3'>
                         <Loader2 className='h-8 w-8 text-purple-600 dark:text-purple-400 animate-spin mx-auto' />
                         <p className='text-gray-600 dark:text-gray-300'>
                           Loading payment options...
                         </p>
                       </div>
+                    ) : (
+                      <PayPalButtons
+                        style={{
+                          layout: 'vertical',
+                          color: 'blue',
+                          shape: 'rect',
+                          label: 'pay',
+                        }}
+                        createOrder={createOrder}
+                        onApprove={handleApprove}
+                        onError={handleError}
+                        onCancel={() =>
+                          console.log('Payment cancelled by user')
+                        }
+                      />
                     )}
-                    <PayPalButtons
-                      style={{
-                        layout: 'vertical',
-                        color: 'blue',
-                        shape: 'rect',
-                        label: 'pay',
-                      }}
-                      createOrder={createOrder}
-                      onApprove={handleApprove}
-                      onError={handleError}
-                      onCancel={() => console.log('Payment cancelled by user')}
-                    />
                   </PayPalScriptProvider>
                 )}
               </div>
-
               {/* Debug info for PayPal ClientID */}
               <div className='mt-4 text-xs text-gray-400 dark:text-gray-500'>
                 <details>
