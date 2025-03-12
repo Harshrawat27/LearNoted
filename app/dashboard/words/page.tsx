@@ -6,6 +6,8 @@ import dbConnect from '../../lib/dbConnect';
 import { User } from '@/models/User';
 import { Search } from '@/models/Search';
 import WordsPageClient from './WordsPageClient';
+import { Suspense } from 'react';
+import WordsLoading from './loading';
 
 export default async function WordsPage() {
   // 1. Check session (server-side)
@@ -34,10 +36,12 @@ export default async function WordsPage() {
 
   // 6. Render client component with initial data
   return (
-    <WordsPageClient
-      initialSearches={JSON.parse(JSON.stringify(initialSearches))}
-      totalCount={totalSearches}
-      userId={userDoc._id.toString()}
-    />
+    <Suspense fallback={<WordsLoading />}>
+      <WordsPageClient
+        initialSearches={JSON.parse(JSON.stringify(initialSearches))}
+        totalCount={totalSearches}
+        userId={userDoc._id.toString()}
+      />
+    </Suspense>
   );
 }

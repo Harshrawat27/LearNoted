@@ -39,6 +39,12 @@ export default function Header() {
           About
         </a>
         <a
+          href='/pricing'
+          className='text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition-colors'
+        >
+          Pricing
+        </a>
+        <a
           href='#contact'
           className='text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition-colors'
         >
