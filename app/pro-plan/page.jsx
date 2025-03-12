@@ -374,48 +374,36 @@ export default function ProPlanPage() {
                     </p>
                   </div>
                 ) : (
-                  <div className='relative'>
-                    {!paypalReady && (
-                      <div className='absolute inset-0 z-10 bg-white dark:bg-gray-800 bg-opacity-80 dark:bg-opacity-80 flex flex-col items-center justify-center'>
-                        <Loader2 className='h-8 w-8 text-purple-600 dark:text-purple-400 animate-spin mb-2' />
-                        <p className='text-gray-600 dark:text-gray-300'>
-                          Loading payment options...
-                        </p>
-                      </div>
-                    )}
-                    <PayPalScriptProvider
-                      options={{
-                        'client-id': PAYPAL_CLIENT_ID,
-                        currency: 'USD',
-                        // Always use sandbox for easier debugging
-                        'enable-funding': 'card',
-                        'disable-funding': 'paylater,credit',
-                        components: 'buttons',
-                        intent: 'capture',
-                        debug: true,
+                  <PayPalScriptProvider
+                    options={{
+                      'client-id': PAYPAL_CLIENT_ID,
+                      currency: 'USD',
+                      // Always use sandbox for easier debugging
+                      'enable-funding': 'card',
+                      'disable-funding': 'paylater,credit',
+                      components: 'buttons',
+                      intent: 'capture',
+                      debug: true,
+                    }}
+                    onInit={() => setPaypalReady(true)}
+                    onError={(err) => {
+                      console.error('PayPal script error:', err);
+                      setPaymentError('Failed to load payment processor');
+                    }}
+                  >
+                    <PayPalButtons
+                      style={{
+                        layout: 'vertical',
+                        color: 'blue',
+                        shape: 'rect',
+                        label: 'pay',
                       }}
-                      onInit={() => setPaypalReady(true)}
-                      onError={(err) => {
-                        console.error('PayPal script error:', err);
-                        setPaymentError('Failed to load payment processor');
-                      }}
-                    >
-                      <PayPalButtons
-                        style={{
-                          layout: 'vertical',
-                          color: 'blue',
-                          shape: 'rect',
-                          label: 'pay',
-                        }}
-                        createOrder={createOrder}
-                        onApprove={handleApprove}
-                        onError={handleError}
-                        onCancel={() =>
-                          console.log('Payment cancelled by user')
-                        }
-                      />
-                    </PayPalScriptProvider>
-                  </div>
+                      createOrder={createOrder}
+                      onApprove={handleApprove}
+                      onError={handleError}
+                      onCancel={() => console.log('Payment cancelled by user')}
+                    />
+                  </PayPalScriptProvider>
                 )}
               </div>
               {/* Debug info for PayPal ClientID */}
