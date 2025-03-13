@@ -346,7 +346,7 @@ export default function ProPlanPage() {
                 <div className='bg-red-100 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-300 px-4 py-4 rounded-xl mb-6'>
                   <div className='flex items-start'>
                     <AlertCircle className='h-5 w-5 mr-2 mt-0.5 flex-shrink-0' />
-                    {/* <div>
+                    <div>
                       <p className='font-semibold'>Error:</p>
                       <p>{paymentError}</p>
                       {debugInfo && (
@@ -359,7 +359,7 @@ export default function ProPlanPage() {
                           </pre>
                         </details>
                       )}
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               )}
@@ -406,7 +406,7 @@ export default function ProPlanPage() {
                 )}
               </div>
               {/* Debug info for PayPal ClientID */}
-              <div className='mt-4 text-xs text-gray-400 dark:text-gray-500'>
+              {/* <div className='mt-4 text-xs text-gray-400 dark:text-gray-500'>
                 <details>
                   <summary className='cursor-pointer hover:underline'>
                     Payment configuration
@@ -417,7 +417,7 @@ export default function ProPlanPage() {
                     {PAYPAL_CLIENT_ID.substring(PAYPAL_CLIENT_ID.length - 5)}
                   </p>
                 </details>
-              </div>
+              </div> */}
             </div>
           </div>
 
