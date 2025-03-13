@@ -173,8 +173,8 @@ export default function ProPlanPage() {
           <header className='flex items-center justify-between py-4 mb-12'>
             <Link href='/' className='flex items-center gap-2'>
               <Image
-                src='/learnoted-logo.svg'
-                alt='AI Extension Logo'
+                src='/learnoted-logo-white.svg'
+                alt='LearNoted Logo'
                 width={40}
                 height={40}
                 className='rounded-full'
@@ -212,14 +212,14 @@ export default function ProPlanPage() {
           <header className='flex items-center justify-between py-4 mb-12'>
             <Link href='/' className='flex items-center gap-2'>
               <Image
-                src='/logo.png'
-                alt='AI Extension Logo'
+                src='/learnoted-logo-white.svg'
+                alt='LearNoted Logo'
                 width={40}
                 height={40}
                 className='rounded-full'
               />
               <h1 className='text-2xl font-bold text-gray-800 dark:text-white'>
-                AI Extension
+                LearNoted
               </h1>
             </Link>
           </header>
@@ -255,14 +255,14 @@ export default function ProPlanPage() {
           <header className='flex items-center justify-between py-4 mb-12'>
             <Link href='/' className='flex items-center gap-2'>
               <Image
-                src='/logo.png'
-                alt='AI Extension Logo'
+                src='/learnoted-logo-white.svg'
+                alt='Learnoted Logo'
                 width={40}
                 height={40}
                 className='rounded-full'
               />
               <h1 className='text-2xl font-bold text-gray-800 dark:text-white'>
-                AI Extension
+                LearNoted
               </h1>
             </Link>
           </header>
