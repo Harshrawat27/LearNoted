@@ -83,17 +83,19 @@ export default function DashboardLayout({
         } md:translate-x-0 fixed md:static z-30 transition-transform duration-300 w-64 h-full bg-white dark:bg-gray-800 shadow-md`}
       >
         <div className='flex flex-col h-full'>
-          {/* Logo and Title */}
-          <div className='flex items-center gap-3 p-5 border-b border-gray-200 dark:border-gray-700'>
-            <Image
-              src='/learnoted-logo-white.svg'
-              alt='Logo'
-              width={40}
-              height={40}
-              className='rounded-full'
-            />
-            <h1 className='text-xl font-bold'>LearNoted</h1>
-          </div>
+          <Link href='/'>
+            {/* Logo and Title */}
+            <div className='flex items-center gap-3 p-5 border-b border-gray-200 dark:border-gray-700'>
+              <Image
+                src='/learnoted-logo-white.svg'
+                alt='Logo'
+                width={40}
+                height={40}
+                className='rounded-full'
+              />
+              <h1 className='text-xl font-bold'>LearNoted</h1>
+            </div>
+          </Link>
 
           {/* Nav Items */}
           <nav className='flex-1 p-4 space-y-2'>
