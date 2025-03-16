@@ -5,16 +5,17 @@ import Image from 'next/image';
 import Header from './components/Header';
 // No Button import needed
 import { HighlighterIcon, Search, Chrome, BookOpen, Brain } from 'lucide-react';
+import NewsletterForm from './components/NewsletterForm'; // Import the new form component
 
 export default function HomePage() {
-  const [email, setEmail] = useState('');
+  // const [email, setEmail] = useState('');
 
-  const handleSubscribe = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // Handle subscription logic here
-    alert(`Subscribed with email: ${email}`);
-    setEmail('');
-  };
+  // const handleSubscribe = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   // Handle subscription logic here
+  //   alert(`Subscribed with email: ${email}`);
+  //   setEmail('');
+  // };
 
   return (
     <div className='min-h-screen bg-gray-50 dark:bg-gray-900'>
@@ -535,7 +536,7 @@ export default function HomePage() {
                 </p>
               </div>
               <div>
-                <form
+                {/* <form
                   onSubmit={handleSubscribe}
                   className='flex flex-col sm:flex-row gap-3'
                 >
@@ -553,7 +554,8 @@ export default function HomePage() {
                   >
                     Subscribe
                   </button>
-                </form>
+                </form> */}
+                <NewsletterForm />
               </div>
             </div>
           </div>
