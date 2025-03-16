@@ -240,8 +240,8 @@ export default function HomePage() {
                   <Chrome className='h-8 w-8 text-purple-600 dark:text-purple-400' />
                 </div>
                 <Image
-                  src='/feature-integration.png'
-                  alt='Browser Integration Feature'
+                  src='/highlight.gif'
+                  alt='Highlight feature'
                   width={500}
                   height={300}
                   className='rounded-lg'
