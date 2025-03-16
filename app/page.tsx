@@ -1,6 +1,4 @@
-'use client';
-
-import { useState } from 'react';
+// import { useState } from 'react';
 import Image from 'next/image';
 import Header from './components/Header';
 // No Button import needed
@@ -536,25 +534,6 @@ export default function HomePage() {
                 </p>
               </div>
               <div>
-                {/* <form
-                  onSubmit={handleSubscribe}
-                  className='flex flex-col sm:flex-row gap-3'
-                >
-                  <input
-                    type='email'
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder='Enter your email'
-                    required
-                    className='flex-grow px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500'
-                  />
-                  <button
-                    type='submit'
-                    className='bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 whitespace-nowrap rounded-md transition-colors'
-                  >
-                    Subscribe
-                  </button>
-                </form> */}
                 <NewsletterForm />
               </div>
             </div>
