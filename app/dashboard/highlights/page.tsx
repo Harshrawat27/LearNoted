@@ -4,6 +4,8 @@ import { authOptions } from '../../lib/authOptions'; // Adjust path
 import dbConnect from '../../lib/dbConnect'; // Adjust path
 import Highlight from '@/models/Highlight'; // Adjust path
 import HighlightsPageClient from './HighlightsPageClient';
+import { Suspense } from 'react';
+import HighlightsLoading from './loading';
 
 export default async function HighlightsPage() {
   // Check authentication
@@ -29,9 +31,11 @@ export default async function HighlightsPage() {
   const totalHighlights = await Highlight.countDocuments({ userEmail });
 
   return (
-    <HighlightsPageClient
-      initialHighlights={JSON.parse(JSON.stringify(initialHighlights))}
-      totalCount={totalHighlights}
-    />
+    <Suspense fallback={<HighlightsLoading />}>
+      <HighlightsPageClient
+        initialHighlights={JSON.parse(JSON.stringify(initialHighlights))}
+        totalCount={totalHighlights}
+      />
+    </Suspense>
   );
 }
