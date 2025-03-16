@@ -75,8 +75,8 @@ export default function HomePage() {
                   <HighlighterIcon className='h-8 w-8 text-purple-600 dark:text-purple-400' />
                 </div>
                 <Image
-                  src='/feature-highlight.png'
-                  alt='Highlighting Feature'
+                  src='/Vocabulary.gif'
+                  alt='Vocabulary Feature'
                   width={500}
                   height={300}
                   className='rounded-lg'
@@ -84,7 +84,7 @@ export default function HomePage() {
               </div>
               <div>
                 <h3 className='text-2xl font-bold text-gray-900 dark:text-white mb-4'>
-                  Easy Highlighting
+                  Easy Search for work meaning
                 </h3>
                 <p className='text-lg text-gray-600 dark:text-gray-300 mb-6'>
                   Highlight text on any webpage with just a few clicks. Our
@@ -224,7 +224,7 @@ export default function HomePage() {
                   <Search className='h-8 w-8 text-purple-600 dark:text-purple-400' />
                 </div>
                 <Image
-                  src='/feature-search.png'
+                  src='/youtube-highlight-1.gif'
                   alt='Search Feature'
                   width={500}
                   height={300}
