@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
   UserCircle,
-  BarChart3,
+  // BarChart3,
   BookOpen,
   Menu,
   X,
@@ -44,11 +44,11 @@ export default function DashboardLayout({
       href: '/dashboard',
       icon: <UserCircle className='w-5 h-5' />,
     },
-    {
-      label: 'Usage Statistics',
-      href: '/dashboard/usage',
-      icon: <BarChart3 className='w-5 h-5' />,
-    },
+    // {
+    //   label: 'Usage Statistics',
+    //   href: '/dashboard/usage',
+    //   icon: <BarChart3 className='w-5 h-5' />,
+    // },
     {
       label: 'Saved Words',
       href: '/dashboard/words',
