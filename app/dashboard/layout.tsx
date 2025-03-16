@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-// import Image from 'next/image';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
   UserCircle,
@@ -11,7 +11,7 @@ import {
   Menu,
   X,
   LogOut,
-  // Highlighter,
+  Highlighter,
   Youtube,
 } from 'lucide-react';
 
@@ -54,11 +54,11 @@ export default function DashboardLayout({
       href: '/dashboard/words',
       icon: <BookOpen className='w-5 h-5' />,
     },
-    // {
-    //   label: 'Highlighted Text',
-    //   href: '/dashboard/highlights',
-    //   icon: <Highlighter className='w-5 h-5' />,
-    // },
+    {
+      label: 'Highlighted Text',
+      href: '/dashboard/highlights',
+      icon: <Highlighter className='w-5 h-5' />,
+    },
     {
       label: 'Youtube Highlight',
       href: '/dashboard/youtube-highlights',
@@ -85,13 +85,13 @@ export default function DashboardLayout({
         <div className='flex flex-col h-full'>
           {/* Logo and Title */}
           <div className='flex items-center gap-3 p-5 border-b border-gray-200 dark:border-gray-700'>
-            {/* <Image
-              src='/logo.png'
+            <Image
+              src='/learnoted-logo-white.svg'
               alt='Logo'
               width={40}
               height={40}
               className='rounded-full'
-            /> */}
+            />
             <h1 className='text-xl font-bold'>LearNoted</h1>
           </div>
 
