@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization, Origin',
   'Access-Control-Allow-Credentials': 'true',
 };
@@ -55,12 +55,26 @@ export async function POST(req) {
   try {
     const body = await req.json();
 
-    // Create highlight with all fields including context and charOffsets
+    // Check if this is a special action to remove all highlights
+    if (body.action === 'removeAllHighlights' && body.url) {
+      const result = await Highlight.deleteMany({
+        userEmail,
+        url: body.url,
+      });
+
+      return NextResponse.json(
+        { message: 'All highlights removed', count: result.deletedCount },
+        { headers: corsHeaders }
+      );
+    }
+
+    // Create highlight with all fields including serialized data
     const highlight = await Highlight.create({
       userEmail,
       text: body.text,
       color: body.color,
       url: body.url,
+      serialized: body.serialized || '',
       context: body.context || '',
       charOffsets: body.charOffsets || null,
     });
@@ -162,6 +176,68 @@ export async function GET(req) {
     console.error('Highlight fetch error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch highlights' },
+      { status: 400, headers: corsHeaders }
+    );
+  }
+}
+
+export async function DELETE(req) {
+  await dbConnect();
+
+  let userEmail = null;
+  const authHeader = req.headers.get('authorization');
+
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    const token = authHeader.split(' ')[1];
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      userEmail = decoded.email;
+    } catch (err) {
+      return NextResponse.json(
+        { error: `Invalid token ${err}` },
+        { status: 401, headers: corsHeaders }
+      );
+    }
+  }
+
+  if (!userEmail) {
+    const session = await getServerSession(authOptions);
+    if (session?.user?.email) {
+      userEmail = session.user.email;
+    }
+  }
+
+  if (!userEmail) {
+    return NextResponse.json(
+      { error: 'Unauthorized' },
+      { status: 401, headers: corsHeaders }
+    );
+  }
+
+  const url = new URL(req.url);
+  const urlFilter = url.searchParams.get('url') || '';
+
+  if (!urlFilter) {
+    return NextResponse.json(
+      { error: 'URL parameter is required' },
+      { status: 400, headers: corsHeaders }
+    );
+  }
+
+  try {
+    const result = await Highlight.deleteMany({
+      userEmail,
+      url: urlFilter,
+    });
+
+    return NextResponse.json(
+      { message: 'Highlights removed', count: result.deletedCount },
+      { headers: corsHeaders }
+    );
+  } catch (error) {
+    console.error('Highlight delete error:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete highlights' },
       { status: 400, headers: corsHeaders }
     );
   }

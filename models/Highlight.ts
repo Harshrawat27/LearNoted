@@ -20,6 +20,11 @@ const HighlightSchema = new mongoose.Schema({
     enum: ['yellow', 'green', 'blue', 'pink', 'purple'],
     default: 'yellow',
   },
+  // Rangy serialized data for precise highlight restoration
+  serialized: {
+    type: String,
+    default: '',
+  },
   // Added field for storing surrounding text
   context: {
     type: String,
