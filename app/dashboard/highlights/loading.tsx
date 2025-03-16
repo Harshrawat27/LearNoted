@@ -1,5 +1,5 @@
 'use client';
-import { Bookmark, Search as SearchIcon } from 'lucide-react';
+import { HighlighterIcon, Search as SearchIcon } from 'lucide-react';
 
 export default function HighlightsLoading() {
   return (
@@ -44,7 +44,7 @@ export default function HighlightsLoading() {
         <div className='lg:col-span-2 bg-white dark:bg-gray-800 rounded-2xl shadow-md'>
           <div className='h-full flex items-center justify-center p-6 text-center text-gray-500'>
             <div>
-              <Bookmark className='h-12 w-12 mx-auto mb-4 opacity-30' />
+              <HighlighterIcon className='h-12 w-12 mx-auto mb-4 opacity-30' />
               <div className='h-6 w-32 bg-gray-200 dark:bg-gray-700 rounded-md mx-auto animate-pulse'></div>
               <div className='h-4 w-56 bg-gray-200 dark:bg-gray-700 rounded-md mx-auto mt-2 animate-pulse'></div>
             </div>

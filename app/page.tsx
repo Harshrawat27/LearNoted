@@ -42,9 +42,9 @@ export default function HomePage() {
               </div>
             </div>
             <div className='relative'>
-              <div className='bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 md:ml-12'>
+              <div className='bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-2 md:ml-12'>
                 <Image
-                  src='/dashboard-preview.png'
+                  src='/hero-section.gif'
                   alt='Dashboard Preview'
                   width={500}
                   height={300}
@@ -70,7 +70,7 @@ export default function HomePage() {
           <div className='space-y-24'>
             {/* Feature 1: Image on left, text on right */}
             <div className='grid md:grid-cols-2 gap-12 items-center'>
-              <div className='bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 relative'>
+              <div className='bg-white dark:bg-gray-800 rounded-2xl shadow-md p-3 relative'>
                 <div className='absolute -top-4 -left-4 bg-purple-100 dark:bg-purple-900/20 p-4 rounded-xl'>
                   <HighlighterIcon className='h-8 w-8 text-purple-600 dark:text-purple-400' />
                 </div>
@@ -219,7 +219,7 @@ export default function HomePage() {
                   </li>
                 </ul>
               </div>
-              <div className='order-1 md:order-2 bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 relative'>
+              <div className='order-1 md:order-2 bg-white dark:bg-gray-800 rounded-2xl shadow-md p-3 relative'>
                 <div className='absolute -top-4 -right-4 bg-purple-100 dark:bg-purple-900/20 p-4 rounded-xl'>
                   <Search className='h-8 w-8 text-purple-600 dark:text-purple-400' />
                 </div>
@@ -235,7 +235,7 @@ export default function HomePage() {
 
             {/* Feature 3: Image on left, text on right */}
             <div className='grid md:grid-cols-2 gap-12 items-center'>
-              <div className='bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 relative'>
+              <div className='bg-white dark:bg-gray-800 rounded-2xl shadow-md p-3 relative'>
                 <div className='absolute -top-4 -left-4 bg-purple-100 dark:bg-purple-900/20 p-4 rounded-xl'>
                   <Chrome className='h-8 w-8 text-purple-600 dark:text-purple-400' />
                 </div>
