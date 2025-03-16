@@ -1,8 +1,8 @@
 // app/api/subscribe/route.js
 
 import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/dbConnect';
-import Subscriber from '@/models/Subscriber';
+import dbConnect from '../../lib/dbConnect';
+import Subscriber from '../../../models/Subscriber';
 
 export async function POST(request) {
   try {
