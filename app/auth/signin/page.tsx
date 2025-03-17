@@ -89,7 +89,7 @@ function SignInComponent() {
               </Link>{' '}
               and{' '}
               <Link
-                href='/privacy'
+                href='/privacy-policy'
                 className='text-purple-600 dark:text-purple-400 hover:underline'
               >
                 Privacy Policy
