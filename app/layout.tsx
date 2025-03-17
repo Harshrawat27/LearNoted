@@ -23,10 +23,9 @@ export const metadata: Metadata = {
     icon: '/LearNoted-logo-white-512.svg', // Path to favicon in public directory
   },
   other: {
-    'google-site-verification': 'E2MKD18rmL2R7WfFDZ3gCNxaDzSlP8i2hXAbFLJdsYw',
+    'google-site-verification': 'OUXooCc_fRcKZ9mOTlYEnT8NJCOIdpjE1t_zT_nm2B4',
   },
 };
-
 export default function RootLayout({
   children,
 }: {
