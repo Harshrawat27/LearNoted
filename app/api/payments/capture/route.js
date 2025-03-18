@@ -301,14 +301,36 @@ export async function POST(request) {
 
           console.log('Updating user plan to paid...');
           user.subscriptionPlan = 'paid';
+
+          // Get current date for record-keeping
+          const currentDate = new Date();
+
+          // Update dateOfPurchase only if it's not already set
+          if (!user.dateOfPurchase) {
+            console.log('Setting initial purchase date...');
+            user.dateOfPurchase = currentDate;
+          } else {
+            console.log(
+              'Purchase date already exists, keeping original date...'
+            );
+          }
+
+          // Always update the renewal date
+          console.log('Updating renewal date...');
+          user.dateOfRenewal = currentDate;
+
           await user.save();
           console.log(
             `User ${session.user.email} upgraded to paid plan successfully`
           );
+          console.log(`Purchase date: ${user.dateOfPurchase}`);
+          console.log(`Renewal date: ${user.dateOfRenewal}`);
 
           return NextResponse.json({
             success: true,
             message: 'Payment processed successfully and plan upgraded',
+            purchaseDate: user.dateOfPurchase,
+            renewalDate: user.dateOfRenewal,
           });
         } catch (dbError) {
           console.error('Database error updating user plan:', dbError);

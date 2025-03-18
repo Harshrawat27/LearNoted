@@ -33,6 +33,15 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    // New fields for purchase and renewal dates
+    dateOfPurchase: {
+      type: Date,
+      default: null,
+    },
+    dateOfRenewal: {
+      type: Date,
+      default: null,
+    },
   },
   { timestamps: true }
 );
