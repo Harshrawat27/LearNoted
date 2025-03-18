@@ -75,7 +75,7 @@ export async function POST(req) {
       return NextResponse.json(
         {
           error: 'Monthly word search limit reached',
-          remainingSearches: 100 - user.wordSearchCount,
+          remainingSearches: 20 - user.wordSearchCount,
         },
         { status: 403, headers: corsHeaders }
       );
@@ -143,7 +143,7 @@ export async function POST(req) {
         details: responseText,
         remainingSearches:
           user.subscriptionPlan === 'free'
-            ? 100 - user.wordSearchCount
+            ? 20 - user.wordSearchCount
             : 'Unlimited',
       },
       { headers: corsHeaders }
