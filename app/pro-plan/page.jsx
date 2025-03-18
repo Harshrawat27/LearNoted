@@ -180,7 +180,7 @@ export default function ProPlanPage() {
                 className='rounded-full'
               />
               <h1 className='text-2xl font-bold text-gray-800 dark:text-white'>
-                LearNoted
+                Lear<span className='text-purple-500'>Noted</span>
               </h1>
             </Link>
           </header>
@@ -219,7 +219,7 @@ export default function ProPlanPage() {
                 className='rounded-full'
               />
               <h1 className='text-2xl font-bold text-gray-800 dark:text-white'>
-                LearNoted
+                Lear<span className='text-purple-500'>Noted</span>
               </h1>
             </Link>
           </header>
@@ -262,7 +262,7 @@ export default function ProPlanPage() {
                 className='rounded-full'
               />
               <h1 className='text-2xl font-bold text-gray-800 dark:text-white'>
-                LearNoted
+                Lear<span className='text-purple-500'>Noted</span>
               </h1>
             </Link>
           </header>

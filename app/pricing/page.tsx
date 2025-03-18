@@ -19,7 +19,7 @@ export default function PricingPage() {
               className='rounded-full'
             />
             <h1 className='text-2xl font-bold text-gray-800 dark:text-white'>
-              LearNoted
+              Lear<span className='text-purple-500'>Noted</span>
             </h1>
           </Link>
         </header>
@@ -60,10 +60,11 @@ export default function PricingPage() {
 
             <ul className='space-y-4 mb-8'>
               {[
-                'Up to 50 highlights per month',
-                'Basic search functionality',
-                'Standard support',
+                'Up to 5 highlighted pages',
+                '10 word lookups per month',
+                'Timestamps for up to 5 YouTube videos',
                 'Access on a single browser',
+                'Standard Support',
               ].map((feature, index) => (
                 <li key={index} className='flex items-start'>
                   <div className='flex-shrink-0 mr-2 mt-1'>
@@ -103,18 +104,17 @@ export default function PricingPage() {
             <div className='text-4xl font-bold text-gray-900 dark:text-white mb-6'>
               $5{' '}
               <span className='text-lg font-normal text-gray-600 dark:text-gray-400'>
-                / month
+                / for 30 days
               </span>
             </div>
 
             <ul className='space-y-4 mb-8'>
               {[
-                'Unlimited highlights',
-                'Advanced search and filtering',
-                'Priority support',
+                'Unlimited highlighted pages',
+                'Unlimited word lookups',
+                'Unlimited YouTube video timestamps',
                 'Multi-browser synchronization',
-                'Auto organization features',
-                'Export to PDF and Markdown',
+                'Priority support',
               ].map((feature, index) => (
                 <li key={index} className='flex items-start'>
                   <div className='flex-shrink-0 mr-2 mt-1'>
@@ -143,24 +143,25 @@ export default function PricingPage() {
           <div className='space-y-6'>
             {[
               {
-                question: 'Can I switch plans later?',
+                question: 'Is this a recurring plan?',
                 answer:
-                  'Absolutely! You can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle.',
+                  'No, this is not a recurring plan. You pay just $5 for 30 days of premium access with no automatic renewals.',
               },
               {
-                question: 'Is there a trial period for the Pro plan?',
+                question: 'Is there any subscription option available?',
                 answer:
-                  'Yes, we offer a 14-day free trial of the Pro plan so you can experience all features before committing.',
+                  "No, we don't offer subscription plans. We only want you to pay when you're actively using and benefiting from our premium features.",
               },
               {
-                question: 'How does billing work?',
+                question:
+                  "What happens to my saved data if I don't purchase another 30-day period after my current one expires?",
                 answer:
-                  'We bill monthly. You can cancel your subscription at any time from your account settings.',
+                  "Your saved data will remain accessible for 10 days after your premium period ends. After that, you'll need to purchase another 30-day period to regain access.",
               },
               {
-                question: 'Do you offer refunds?',
+                question: 'Can I cancel my plan?',
                 answer:
-                  "If you're not satisfied with our service, contact us within 30 days of your purchase for a full refund.",
+                  "Since this is a one-time payment for 30 days of access, there's no need to cancel. We won't charge you again unless you choose to purchase another 30-day period.",
               },
             ].map((faq, index) => (
               <div
@@ -186,9 +187,11 @@ export default function PricingPage() {
             organize their web highlights.
           </p>
           <div className='flex flex-col sm:flex-row gap-4 justify-center'>
-            <button className='bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-8 rounded-xl shadow-lg transition-colors'>
-              Get Started for Free
-            </button>
+            <Link href='/auth/signin'>
+              <button className='bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-8 rounded-xl shadow-lg transition-colors'>
+                Get Started for Free
+              </button>
+            </Link>
             <Link href='#features'>
               <button className='bg-white dark:bg-gray-800 text-purple-600 dark:text-purple-400 border border-purple-600 dark:border-purple-400 font-medium py-3 px-8 rounded-xl transition-colors'>
                 Learn More

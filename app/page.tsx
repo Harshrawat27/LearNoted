@@ -25,11 +25,11 @@ export default function HomePage() {
           <div className='grid md:grid-cols-2 gap-12 items-center'>
             <div>
               <h1 className='text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6'>
-                Save and manage your web highlights easily
+                Turn Browsing into Learning
               </h1>
               <p className='text-xl text-gray-600 dark:text-gray-300 mb-8'>
-                Use our browser extension to highlight important content across
-                the web. Access and organize your highlights anytime, anywhere.
+                Capture meanings, highlights, and key moments across the web —
+                all in one place, always at your fingertips.
               </p>
               <div className='flex flex-col sm:flex-row gap-4'>
                 <button className='bg-purple-600 hover:bg-purple-700 text-white px-8 py-6 text-lg rounded-md transition-colors'>
@@ -61,8 +61,8 @@ export default function HomePage() {
               Key Features
             </h2>
             <p className='text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto'>
-              Everything you need to collect, organize and reference important
-              content from around the web.
+              Everything you need to transform casual browsing into productive
+              learning
             </p>
           </div>
 
@@ -83,12 +83,10 @@ export default function HomePage() {
               </div>
               <div>
                 <h3 className='text-2xl font-bold text-gray-900 dark:text-white mb-4'>
-                  Easy Search for work meaning
+                  Instant Word Lookup
                 </h3>
                 <p className='text-lg text-gray-600 dark:text-gray-300 mb-6'>
-                  Highlight text on any webpage with just a few clicks. Our
-                  intuitive interface makes it simple to save important
-                  information as you browse.
+                  Uncover meaning with a simple shortcut
                 </p>
                 <ul className='space-y-3'>
                   <li className='flex items-start'>
@@ -106,7 +104,7 @@ export default function HomePage() {
                       </svg>
                     </div>
                     <span className='text-gray-700 dark:text-gray-300'>
-                      Multiple highlight colors to categorize content
+                      Select any word and press Cmd+M (Mac) or Ctrl+M (Windows)
                     </span>
                   </li>
                   <li className='flex items-start'>
@@ -124,7 +122,7 @@ export default function HomePage() {
                       </svg>
                     </div>
                     <span className='text-gray-700 dark:text-gray-300'>
-                      One-click highlighting with default settings
+                      Get instant definitions without leaving your page
                     </span>
                   </li>
                   <li className='flex items-start'>
@@ -142,8 +140,25 @@ export default function HomePage() {
                       </svg>
                     </div>
                     <span className='text-gray-700 dark:text-gray-300'>
-                      Works on articles, research papers, and any text-based
-                      content
+                      Explore synonyms to enhance your vocabulary
+                    </span>
+                  </li>
+                  <li className='flex items-start'>
+                    <div className='flex-shrink-0 mr-2 mt-1 bg-purple-100 dark:bg-purple-900/20 p-1 rounded-full'>
+                      <svg
+                        className='h-4 w-4 text-purple-600'
+                        fill='currentColor'
+                        viewBox='0 0 20 20'
+                      >
+                        <path
+                          fillRule='evenodd'
+                          d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
+                          clipRule='evenodd'
+                        />
+                      </svg>
+                    </div>
+                    <span className='text-gray-700 dark:text-gray-300'>
+                      Save lookups for future reference
                     </span>
                   </li>
                 </ul>
@@ -154,12 +169,10 @@ export default function HomePage() {
             <div className='grid md:grid-cols-2 gap-12 items-center'>
               <div className='order-2 md:order-1'>
                 <h3 className='text-2xl font-bold text-gray-900 dark:text-white mb-4'>
-                  Powerful Search
+                  Video Timestamp Saver
                 </h3>
                 <p className='text-lg text-gray-600 dark:text-gray-300 mb-6'>
-                  Quickly find your highlights by text content or website
-                  domain. Our powerful search tools help you locate exactly what
-                  you need.
+                  Never lose a key moment again
                 </p>
                 <ul className='space-y-3'>
                   <li className='flex items-start'>
@@ -177,7 +190,7 @@ export default function HomePage() {
                       </svg>
                     </div>
                     <span className='text-gray-700 dark:text-gray-300'>
-                      Filter by website, date, or content
+                      Save exact timestamps while watching YouTube videos
                     </span>
                   </li>
                   <li className='flex items-start'>
@@ -195,7 +208,7 @@ export default function HomePage() {
                       </svg>
                     </div>
                     <span className='text-gray-700 dark:text-gray-300'>
-                      Full-text search across all your highlights
+                      Add notes to mark important points and insights
                     </span>
                   </li>
                   <li className='flex items-start'>
@@ -213,7 +226,25 @@ export default function HomePage() {
                       </svg>
                     </div>
                     <span className='text-gray-700 dark:text-gray-300'>
-                      Save and organize favorite searches
+                      Create a personalized learning timeline
+                    </span>
+                  </li>
+                  <li className='flex items-start'>
+                    <div className='flex-shrink-0 mr-2 mt-1 bg-purple-100 dark:bg-purple-900/20 p-1 rounded-full'>
+                      <svg
+                        className='h-4 w-4 text-purple-600'
+                        fill='currentColor'
+                        viewBox='0 0 20 20'
+                      >
+                        <path
+                          fillRule='evenodd'
+                          d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
+                          clipRule='evenodd'
+                        />
+                      </svg>
+                    </div>
+                    <span className='text-gray-700 dark:text-gray-300'>
+                      Quickly jump back to crucial moments in any video
                     </span>
                   </li>
                 </ul>
@@ -248,11 +279,10 @@ export default function HomePage() {
               </div>
               <div>
                 <h3 className='text-2xl font-bold text-gray-900 dark:text-white mb-4'>
-                  Seamless Integration
+                  Smart Highlighting
                 </h3>
                 <p className='text-lg text-gray-600 dark:text-gray-300 mb-6'>
-                  Works perfectly with your browser with no complicated setup
-                  required. Start highlighting in seconds.
+                  Capture what matters most
                 </p>
                 <ul className='space-y-3'>
                   <li className='flex items-start'>
@@ -270,7 +300,7 @@ export default function HomePage() {
                       </svg>
                     </div>
                     <span className='text-gray-700 dark:text-gray-300'>
-                      Compatible with Chrome, Firefox, and Edge
+                      Highlight important text across any website
                     </span>
                   </li>
                   <li className='flex items-start'>
@@ -288,7 +318,7 @@ export default function HomePage() {
                       </svg>
                     </div>
                     <span className='text-gray-700 dark:text-gray-300'>
-                      Cloud sync across all your devices
+                      Organize highlights by color and category
                     </span>
                   </li>
                   <li className='flex items-start'>
@@ -306,8 +336,25 @@ export default function HomePage() {
                       </svg>
                     </div>
                     <span className='text-gray-700 dark:text-gray-300'>
-                      Lightweight extension that won&apos;t slow down your
-                      browser{' '}
+                      Access your highlights from any device
+                    </span>
+                  </li>
+                  <li className='flex items-start'>
+                    <div className='flex-shrink-0 mr-2 mt-1 bg-purple-100 dark:bg-purple-900/20 p-1 rounded-full'>
+                      <svg
+                        className='h-4 w-4 text-purple-600'
+                        fill='currentColor'
+                        viewBox='0 0 20 20'
+                      >
+                        <path
+                          fillRule='evenodd'
+                          d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
+                          clipRule='evenodd'
+                        />
+                      </svg>
+                    </div>
+                    <span className='text-gray-700 dark:text-gray-300'>
+                      Review and study your collected insights
                     </span>
                   </li>
                 </ul>
@@ -368,11 +415,13 @@ export default function HomePage() {
                 <div className='mr-auto w-5/12 pt-2'>
                   <div className='bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md border border-gray-200 dark:border-gray-600'>
                     <h3 className='text-xl font-bold text-gray-900 dark:text-white mb-3'>
-                      Highlight Important Content
+                      Capture Knowledge As You Browse{' '}
                     </h3>
                     <p className='text-gray-600 dark:text-gray-300'>
-                      Select text on any webpage and choose your highlight
-                      color. Save key information as you browse.
+                      Select words for instant definitions, highlight important
+                      passages, or save video timestamps with just a few clicks.
+                      All your valuable insights are automatically organized in
+                      your personal dashboard.
                     </p>
                   </div>
                 </div>
@@ -405,7 +454,7 @@ export default function HomePage() {
                     </h3>
                     <p className='text-gray-600 dark:text-gray-300'>
                       View, search, and organize all your highlights in one
-                      place. Filter by website, date, or content.
+                      place. Filter by website, content, or comments.
                     </p>
                   </div>
                 </div>
@@ -423,7 +472,7 @@ export default function HomePage() {
                       Keep Learning
                     </h3>
                     <p className='text-gray-600 dark:text-gray-300'>
-                      Reference your highlights anytime to retain knowledge
+                      Reference your dashboard anytime to retain knowledge
                       better and improve your learning process.
                     </p>
                   </div>
@@ -526,11 +575,12 @@ export default function HomePage() {
             <div className='grid md:grid-cols-2 gap-8 items-center'>
               <div>
                 <h2 className='text-3xl font-bold text-gray-900 dark:text-white mb-4'>
-                  Stay Updated
+                  Early bird access
                 </h2>
                 <p className='text-lg text-gray-700 dark:text-gray-300 mb-6'>
-                  Subscribe to our newsletter for updates, tips, and exclusive
-                  features.
+                  Our extension is currently under review. Subscribe now to be
+                  notified the moment Learnoted launches and be among the first
+                  to enhance your browsing experience."{' '}
                 </p>
               </div>
               <div>
