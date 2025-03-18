@@ -410,16 +410,6 @@ export default function HighlightsPageClient({
                             &quot;{highlight.text}&quot;
                           </p>
 
-                          {/* Show context if expanded */}
-                          {selectedHighlight?._id === highlight._id &&
-                            highlight.context && (
-                              <div className='mt-3 pt-3 border-t border-gray-200 dark:border-gray-600'>
-                                <p className='text-gray-700 dark:text-gray-300 text-sm'>
-                                  {highlight.context}
-                                </p>
-                              </div>
-                            )}
-
                           <div className='mt-2 text-xs text-gray-500 dark:text-gray-400'>
                             {new Date(highlight.createdAt).toLocaleTimeString(
                               'en-US',
