@@ -9,15 +9,10 @@ import {
   Globe,
 } from 'lucide-react';
 
-interface HighlightItem {
-  _id: string;
-  text: string;
-  color: string;
-  context: string;
-  url: string;
-  createdAt: string;
-  title?: string; // Optional website title
-}
+import { ClientHighlightItem } from '../../utils/highlightAdapter';
+
+// Just alias the type to maintain compatibility with the existing component
+type HighlightItem = ClientHighlightItem;
 
 interface HighlightsPageClientProps {
   initialHighlights: HighlightItem[];

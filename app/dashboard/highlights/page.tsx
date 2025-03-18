@@ -68,10 +68,15 @@ export default async function HighlightsPage() {
   // Format the results to ensure they match the expected client format
   const formattedHighlights = formatAggregationResults(initialHighlights);
 
+  // Use a serializable version for the client
+  const serializableHighlights = JSON.parse(
+    JSON.stringify(formattedHighlights)
+  );
+
   return (
     <Suspense fallback={<HighlightsLoading />}>
       <HighlightsPageClient
-        initialHighlights={JSON.parse(JSON.stringify(formattedHighlights))}
+        initialHighlights={serializableHighlights}
         totalCount={totalHighlights}
       />
     </Suspense>

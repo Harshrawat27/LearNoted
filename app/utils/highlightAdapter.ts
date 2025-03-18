@@ -3,13 +3,20 @@
  * the new URL-based highlight model and the client components
  */
 
+// Interface for the character offsets structure
+export interface CharOffsets {
+  start: number;
+  end: number;
+  [key: string]: unknown; // For any additional properties
+}
+
 // Interface for a highlight item in the new structure
 export interface URLHighlightItem {
   text: string;
   color: string;
   serialized: string;
   context: string;
-  charOffsets: any;
+  charOffsets: CharOffsets | null;
   createdAt: Date;
   _id: string;
 }
@@ -32,7 +39,7 @@ export interface ClientHighlightItem {
   url: string;
   createdAt: string;
   serialized?: string;
-  charOffsets?: any;
+  charOffsets?: CharOffsets | null;
   title?: string;
 }
 
@@ -54,11 +61,24 @@ export function convertToClientFormat(
   }));
 }
 
+// Type for aggregation results
+export interface AggregationResult {
+  _id: string | { toString(): string };
+  text?: string;
+  color?: string;
+  context?: string;
+  url?: string;
+  createdAt?: Date | string;
+  serialized?: string;
+  charOffsets?: CharOffsets | null;
+  [key: string]: unknown; // For any additional fields
+}
+
 /**
  * Formats aggregation results to client format, ensuring all expected fields
  */
 export function formatAggregationResults(
-  results: any[]
+  results: AggregationResult[]
 ): ClientHighlightItem[] {
   return results.map((item) => ({
     _id: item._id.toString(),
