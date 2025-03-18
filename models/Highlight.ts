@@ -1,15 +1,7 @@
 import mongoose from 'mongoose';
 
-const HighlightSchema = new mongoose.Schema({
-  userEmail: {
-    type: String,
-    required: true,
-    index: true,
-  },
-  url: {
-    type: String,
-    required: true,
-  },
+// Define a schema for individual highlights within a domain
+const HighlightItemSchema = new mongoose.Schema({
   text: {
     type: String,
     required: true,
@@ -19,6 +11,10 @@ const HighlightSchema = new mongoose.Schema({
     required: true,
     enum: ['yellow', 'green', 'blue', 'pink', 'purple'],
     default: 'yellow',
+  },
+  url: {
+    type: String,
+    required: true,
   },
   // Rangy serialized data for precise highlight restoration
   serialized: {
@@ -41,10 +37,35 @@ const HighlightSchema = new mongoose.Schema({
   },
 });
 
+// Main schema for domain-grouped highlights
+const DomainHighlightSchema = new mongoose.Schema({
+  userEmail: {
+    type: String,
+    required: true,
+    index: true,
+  },
+  domain: {
+    type: String,
+    required: true,
+  },
+  highlights: [HighlightItemSchema],
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
 // Create compound index for efficient queries
-HighlightSchema.index({ userEmail: 1, url: 1 });
+DomainHighlightSchema.index({ userEmail: 1, domain: 1 });
 
-const Highlight =
-  mongoose.models.Highlight || mongoose.model('Highlight', HighlightSchema);
+// Pre-save hook to update the updatedAt timestamp whenever the document is modified
+DomainHighlightSchema.pre('save', function (next) {
+  this.updatedAt = new Date();
+  next();
+});
 
-export default Highlight;
+const DomainHighlight =
+  mongoose.models.DomainHighlight ||
+  mongoose.model('DomainHighlight', DomainHighlightSchema);
+
+export default DomainHighlight;

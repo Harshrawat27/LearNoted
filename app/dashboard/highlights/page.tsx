@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../lib/authOptions'; // Adjust path
 import dbConnect from '../../lib/dbConnect'; // Adjust path
-import Highlight from '@/models/Highlight'; // Adjust path
+import DomainHighlight from '@/models/Highlight'; // Adjust path
 import HighlightsPageClient from './HighlightsPageClient';
 import { Suspense } from 'react';
 import HighlightsLoading from './loading';
@@ -23,12 +23,12 @@ export default async function HighlightsPage() {
   }
 
   // Fetch initial highlights (first 20)
-  const initialHighlights = await Highlight.find({ userEmail })
+  const initialHighlights = await DomainHighlight.find({ userEmail })
     .sort({ createdAt: -1 })
     .limit(20)
     .lean();
 
-  const totalHighlights = await Highlight.countDocuments({ userEmail });
+  const totalHighlights = await DomainHighlight.countDocuments({ userEmail });
 
   return (
     <Suspense fallback={<HighlightsLoading />}>
