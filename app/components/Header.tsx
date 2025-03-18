@@ -12,31 +12,33 @@ export default function Header() {
 
   return (
     <header className='flex items-center justify-between py-4 px-6 row-start-1 border-b border-gray-200 dark:border-gray-800'>
-      <div className='flex items-center gap-2'>
-        <Image
-          src='/learnoted-logo-white.svg'
-          alt='AI Extension Logo'
-          width={50}
-          height={50}
-          className='rounded-full'
-        />
-        <h1 className='text-2xl font-bold text-gray-800 dark:text-white'>
-          Lear<span className='text-purple-500'>Noted</span>
-        </h1>
-      </div>
+      <Link href='/'>
+        <div className='flex items-center gap-2'>
+          <Image
+            src='/learnoted-logo-white.svg'
+            alt='AI Extension Logo'
+            width={50}
+            height={50}
+            className='rounded-full'
+          />
+          <h1 className='text-2xl font-bold text-gray-800 dark:text-white'>
+            Lear<span className='text-purple-500'>Noted</span>
+          </h1>
+        </div>
+      </Link>
 
       <nav className='hidden md:flex items-center gap-6'>
         <a
-          href='#features'
+          href='https://www.learnoted.com/#features'
           className='text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition-colors'
         >
           Features
         </a>
         <a
-          href='#about'
+          href='/founders-letter'
           className='text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition-colors'
         >
-          About
+          Founder's Letter
         </a>
         <a
           href='/pricing'
@@ -45,7 +47,7 @@ export default function Header() {
           Pricing
         </a>
         <a
-          href='#contact'
+          href='https://www.learnoted.com/#contact'
           className='text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition-colors'
         >
           Contact
