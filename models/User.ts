@@ -47,7 +47,7 @@ UserSchema.methods.canSearchWord = async function () {
   }
   return (
     this.subscriptionPlan === 'paid' ||
-    (this.subscriptionPlan === 'free' && this.wordSearchCount < 100)
+    (this.subscriptionPlan === 'free' && this.wordSearchCount < 20)
   );
 };
 
