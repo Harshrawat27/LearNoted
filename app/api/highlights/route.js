@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../lib/authOptions';
 import dbConnect from '../../lib/dbConnect';
-import URLHighlight from '../../../models/URLHighlight';
+import URLHighlight from '../../../models/Highlight';
 import jwt from 'jsonwebtoken';
 
 const corsHeaders = {
