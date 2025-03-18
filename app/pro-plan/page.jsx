@@ -174,7 +174,7 @@ export default function ProPlanPage() {
             <Link href='/' className='flex items-center gap-2'>
               <Image
                 src='/learnoted-logo-white.svg'
-                alt='LearNoted Logo'
+                alt='Learnoted Logo'
                 width={40}
                 height={40}
                 className='rounded-full'
@@ -295,17 +295,17 @@ export default function ProPlanPage() {
     <div className='min-h-screen bg-gray-50 dark:bg-gray-900'>
       <div className='max-w-6xl mx-auto px-4 sm:px-6 py-8'>
         {/* Header */}
-        <header className='flex items-center justify-between py-4 mb-8'>
+        <header className='flex items-center justify-between py-4 mb-12'>
           <Link href='/' className='flex items-center gap-2'>
             <Image
-              src='/logo.png'
-              alt='AI Extension Logo'
+              src='/learnoted-logo-white.svg'
+              alt='Learnoted Logo'
               width={40}
               height={40}
               className='rounded-full'
             />
             <h1 className='text-2xl font-bold text-gray-800 dark:text-white'>
-              AI Extension
+              Lear<span className='text-purple-500'>Noted</span>
             </h1>
           </Link>
         </header>
@@ -327,10 +327,11 @@ export default function ProPlanPage() {
               </div>
               <ul className='space-y-3 mb-6'>
                 {[
-                  'Unlimited word searches',
-                  'One-time payment',
-                  'No recurring fees',
-                  'Lifetime access',
+                  'Unlimited highlighted pages',
+                  'Unlimited word lookups',
+                  'Unlimited YouTube video timestamps',
+                  'Multi-browser synchronization',
+                  'Priority support',
                 ].map((feature, index) => (
                   <li key={index} className='flex items-start'>
                     <div className='flex-shrink-0 mr-2 mt-1'>
