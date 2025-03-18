@@ -1,6 +1,7 @@
 // import { useState } from 'react';
 import Image from 'next/image';
 import Header from './components/Header';
+import Link from 'next/link';
 // No Button import needed
 import { HighlighterIcon, Search, Chrome, BookOpen, Brain } from 'lucide-react';
 import NewsletterForm from './components/NewsletterForm'; // Import the new form component
@@ -32,12 +33,16 @@ export default function HomePage() {
                 all in one place, always at your fingertips.
               </p>
               <div className='flex flex-col sm:flex-row gap-4'>
-                <button className='bg-purple-600 hover:bg-purple-700 text-white px-8 py-6 text-lg rounded-md transition-colors'>
-                  Add to Chrome
-                </button>
-                <button className='border border-purple-600 text-purple-600 dark:border-purple-400 dark:text-purple-400 px-8 py-6 text-lg rounded-md transition-colors bg-transparent hover:bg-purple-50 dark:hover:bg-purple-900/10'>
-                  Learn More
-                </button>
+                <Link href='/#contact'>
+                  <button className='bg-purple-600 hover:bg-purple-700 text-white px-8 py-6 text-lg rounded-md transition-colors'>
+                    Add to Chrome
+                  </button>
+                </Link>
+                <Link href='/pricing'>
+                  <button className='border border-purple-600 text-purple-600 dark:border-purple-400 dark:text-purple-400 px-8 py-6 text-lg rounded-md transition-colors bg-transparent hover:bg-purple-50 dark:hover:bg-purple-900/10'>
+                    Learn More
+                  </button>
+                </Link>
               </div>
             </div>
             <div className='relative'>
