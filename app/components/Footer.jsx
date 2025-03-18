@@ -40,6 +40,12 @@ export default function Footer() {
               >
                 Privacy
               </Link>
+              <a
+                href='mailto:harshrawat.dev@gmail.com'
+                className='text-gray-600 hover:text-purple-600 dark:text-gray-300 dark:hover:text-purple-400'
+              >
+                Contact us
+              </a>
             </nav>
           </div>
 

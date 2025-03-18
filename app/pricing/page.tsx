@@ -164,6 +164,22 @@ export default function PricingPage() {
                 answer:
                   "Since this is a one-time payment for 30 days of access, there's no need to cancel. We won't charge you again unless you choose to purchase another 30-day period.",
               },
+              {
+                question:
+                  'What if PayPal is not allowing us to pay or our card is not accepted?',
+                answer: (
+                  <>
+                    You can contact me directly at{' '}
+                    <a
+                      href='mailto:harshrawat.dev@gmail.com'
+                      className='text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300'
+                    >
+                      harshrawat.dev@gmail.com
+                    </a>{' '}
+                    for alternative payment options.
+                  </>
+                ),
+              },
             ].map((faq, index) => (
               <div
                 key={index}
