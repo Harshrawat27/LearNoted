@@ -587,9 +587,9 @@ export default function HomePage() {
                   Our extension is currently under review. Subscribe now to be
                   notified the moment Learnoted launches and be among the first
                   to enhance your browsing experience. <br></br>
-                  <br></br> If you purchase now during our pre-launch, you'll
-                  get 45 days of premium features instead of 30—for just $5 on
-                  your{' '}
+                  <br></br> If you purchase now during our pre-launch,
+                  you&apos;ll get 45 days of premium features instead of 30—for
+                  just $5 on your{' '}
                   <Link
                     className=' text-purple-400 hover:text-purple-600'
                     href='/pro-plan'

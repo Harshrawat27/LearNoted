@@ -328,7 +328,7 @@ export default function ProPlanPage() {
                   Purchase now during our pre-launch period and receive 45 days
                   of premium access for just $5.00 instead of the standard 30
                   days. This special offer applies to your first purchase only.
-                  We'll notify you as soon as Learnoted goes live.{' '}
+                  We&apos;ll notify you as soon as Learnoted goes live.{' '}
                 </p>
               </div>
               <ul className='space-y-3 mb-6'>
