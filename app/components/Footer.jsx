@@ -9,18 +9,20 @@ export default function Footer() {
       <div className='max-w-6xl mx-auto px-4 sm:px-6'>
         <div className='flex flex-col md:flex-row justify-between items-center'>
           {/* Logo and Brand Name */}
-          <div className='flex items-center gap-2 mb-4 md:mb-0'>
-            <Image
-              src='/learnoted-logo-white.svg'
-              alt='LearNoted Logo'
-              width={40}
-              height={40}
-              className='rounded-full'
-            />
-            <span className='text-lg font-semibold text-gray-800 dark:text-white'>
-              Lear<span className='text-purple-500'>Noted</span>
-            </span>
-          </div>
+          <Link href='/'>
+            <div className='flex items-center gap-2 mb-4 md:mb-0'>
+              <Image
+                src='/learnoted-logo-white.svg'
+                alt='LearNoted Logo'
+                width={40}
+                height={40}
+                className='rounded-full'
+              />
+              <span className='text-lg font-semibold text-gray-800 dark:text-white'>
+                Lear<span className='text-purple-500'>Noted</span>
+              </span>
+            </div>
+          </Link>
 
           {/* Navigation Links */}
           <div className='mb-4 md:mb-0'>
