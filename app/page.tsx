@@ -580,7 +580,7 @@ export default function HomePage() {
                 <p className='text-lg text-gray-700 dark:text-gray-300 mb-6'>
                   Our extension is currently under review. Subscribe now to be
                   notified the moment Learnoted launches and be among the first
-                  to enhance your browsing experience."{' '}
+                  to enhance your browsing experience.
                 </p>
               </div>
               <div>
