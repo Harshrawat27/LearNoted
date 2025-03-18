@@ -7,7 +7,30 @@ import HighlightsPageClient from './HighlightsPageClient';
 import { Suspense } from 'react';
 import HighlightsLoading from './loading';
 import mongoose from 'mongoose';
-import { formatAggregationResults } from '../../utils/highlightAdapter';
+
+// Define a type for the highlight from MongoDB
+interface RawHighlight {
+  _id: mongoose.Types.ObjectId | string;
+  text: string;
+  color: string;
+  serialized?: string;
+  context?: string;
+  charOffsets?: any;
+  createdAt: Date;
+  [key: string]: any; // For any additional properties
+}
+
+// Define the formatted highlight interface
+interface FormattedHighlight {
+  _id: string;
+  text: string;
+  color: string;
+  context: string;
+  url: string;
+  createdAt: string;
+  serialized: string;
+  charOffsets: any | null;
+}
 
 export default async function HighlightsPage() {
   // Check authentication
@@ -24,61 +47,102 @@ export default async function HighlightsPage() {
     throw new Error('User email not found in session');
   }
 
-  // Fetch initial highlights using aggregation pipeline
-  const aggregationPipeline = [
-    // Match documents for this user
-    { $match: { userEmail } } as mongoose.PipelineStage.Match,
+  // Fetch all URL documents (which will show in the left panel)
+  const urlDocuments = await URLHighlight.find({ userEmail })
+    .select('url updatedAt highlights')
+    .lean();
 
-    // Unwind the highlights array
-    { $unwind: '$highlights' } as mongoose.PipelineStage.Unwind,
+  // Format the data for the client
+  const urlSummaries = urlDocuments
+    .map((doc) => {
+      return {
+        url: doc.url,
+        title: extractTitle(doc.url),
+        totalHighlights: doc.highlights.length,
+        lastUpdated: doc.updatedAt || getLatestDate(doc.highlights),
+      };
+    })
+    .sort(
+      (a, b) =>
+        new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime()
+    );
 
-    // Sort by creation date
-    { $sort: { 'highlights.createdAt': -1 } } as mongoose.PipelineStage.Sort,
+  // For the first URL, get all its highlights
+  const initialHighlights =
+    urlDocuments.length > 0
+      ? urlDocuments[0].highlights.map((highlight: RawHighlight) => ({
+          ...highlight,
+          url: urlDocuments[0].url,
+        }))
+      : [];
 
-    // Limit to first 20 highlights
-    { $limit: 20 } as mongoose.PipelineStage.Limit,
-
-    // Project to match the old format
-    {
-      $project: {
-        _id: '$highlights._id',
-        text: '$highlights.text',
-        color: '$highlights.color',
-        url: '$url', // URL is now at the parent level
-        serialized: '$highlights.serialized',
-        context: '$highlights.context',
-        charOffsets: '$highlights.charOffsets',
-        createdAt: '$highlights.createdAt',
-      },
-    } as mongoose.PipelineStage.Project,
-  ];
-
-  const initialHighlights = await URLHighlight.aggregate(aggregationPipeline);
-
-  // Count total highlights
-  const countPipeline = [
-    { $match: { userEmail } } as mongoose.PipelineStage.Match,
-    { $unwind: '$highlights' } as mongoose.PipelineStage.Unwind,
-    { $count: 'total' } as mongoose.PipelineStage.Count,
-  ];
-
-  const countResult = await URLHighlight.aggregate(countPipeline);
-  const totalHighlights = countResult.length > 0 ? countResult[0].total : 0;
-
-  // Format the results to ensure they match the expected client format
-  const formattedHighlights = formatAggregationResults(initialHighlights);
+  // Format the highlights for the client
+  const formattedHighlights = formatHighlightsWithUrl(initialHighlights);
 
   // Use a serializable version for the client
-  const serializableHighlights = JSON.parse(
-    JSON.stringify(formattedHighlights)
+  const serializableData = JSON.parse(
+    JSON.stringify({
+      urlSummaries,
+      initialHighlights: formattedHighlights,
+      initialUrl: urlDocuments.length > 0 ? urlDocuments[0].url : null,
+    })
   );
 
   return (
     <Suspense fallback={<HighlightsLoading />}>
       <HighlightsPageClient
-        initialHighlights={serializableHighlights}
-        totalCount={totalHighlights}
+        urlSummaries={serializableData.urlSummaries}
+        initialHighlights={serializableData.initialHighlights}
+        initialUrl={serializableData.initialUrl}
       />
     </Suspense>
   );
+}
+
+// Helper functions
+function extractTitle(url: string): string {
+  try {
+    const urlObj = new URL(url);
+    return urlObj.hostname;
+  } catch {
+    return url;
+  }
+}
+
+function getLatestDate(highlights: RawHighlight[]): Date {
+  if (highlights.length === 0) return new Date();
+
+  return highlights.reduce((latest, highlight) => {
+    const date = new Date(highlight.createdAt);
+    return date > latest ? date : latest;
+  }, new Date(0));
+}
+
+// Define the formatted highlight interface
+interface FormattedHighlight {
+  _id: string;
+  text: string;
+  color: string;
+  context: string;
+  url: string;
+  createdAt: string;
+  serialized: string;
+  charOffsets: any | null;
+}
+
+function formatHighlightsWithUrl(
+  highlights: RawHighlight[]
+): FormattedHighlight[] {
+  return highlights.map((h) => ({
+    _id: h._id.toString(),
+    text: h.text || '',
+    color: h.color || 'yellow',
+    context: h.context || '',
+    url: h.url || '',
+    createdAt: h.createdAt
+      ? new Date(h.createdAt).toISOString()
+      : new Date().toISOString(),
+    serialized: h.serialized || '',
+    charOffsets: h.charOffsets || null,
+  }));
 }
