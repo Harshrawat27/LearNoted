@@ -1,5 +1,5 @@
 'use client';
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Search,
   ExternalLink,
@@ -10,6 +10,12 @@ import {
   Calendar,
 } from 'lucide-react';
 
+interface CharOffsets {
+  start?: number;
+  end?: number;
+  [key: string]: unknown;
+}
+
 // Interfaces for our data types
 interface HighlightItem {
   _id: string;
@@ -19,7 +25,7 @@ interface HighlightItem {
   url: string;
   createdAt: string;
   serialized?: string;
-  charOffsets?: any;
+  charOffsets?: CharOffsets | null;
 }
 
 interface URLSummary {
@@ -45,7 +51,9 @@ export default function HighlightsPageClient({
   initialHighlights,
   initialUrl,
 }: HighlightsPageClientProps) {
-  const [urls, setUrls] = useState<URLSummary[]>(urlSummaries);
+  // We're keeping the URLs state but not updating it after initial load
+  // This is intentional as we're not adding new URLs during the session
+  const [urls] = useState<URLSummary[]>(urlSummaries);
   const [highlights, setHighlights] =
     useState<HighlightItem[]>(initialHighlights);
   const [selectedUrl, setSelectedUrl] = useState<string | null>(initialUrl);
@@ -58,16 +66,6 @@ export default function HighlightsPageClient({
     useState<HighlightItem | null>(
       initialHighlights.length > 0 ? initialHighlights[0] : null
     );
-
-  // Extract domain from URL
-  const getDomain = (url: string): string => {
-    try {
-      const urlObj = new URL(url);
-      return urlObj.hostname;
-    } catch {
-      return url;
-    }
-  };
 
   // Format URL for display
   const formatUrl = (url: string) => {

@@ -15,9 +15,9 @@ interface RawHighlight {
   color: string;
   serialized?: string;
   context?: string;
-  charOffsets?: any;
+  charOffsets?: Record<string, unknown>;
   createdAt: Date;
-  [key: string]: any; // For any additional properties
+  [key: string]: unknown; // For any additional properties
 }
 
 // Define the formatted highlight interface
@@ -29,7 +29,7 @@ interface FormattedHighlight {
   url: string;
   createdAt: string;
   serialized: string;
-  charOffsets: any | null;
+  charOffsets: Record<string, unknown> | null;
 }
 
 export default async function HighlightsPage() {
@@ -127,7 +127,7 @@ interface FormattedHighlight {
   url: string;
   createdAt: string;
   serialized: string;
-  charOffsets: any | null;
+  charOffsets: Record<string, unknown> | null;
 }
 
 function formatHighlightsWithUrl(
@@ -138,11 +138,11 @@ function formatHighlightsWithUrl(
     text: h.text || '',
     color: h.color || 'yellow',
     context: h.context || '',
-    url: h.url || '',
+    url: (h.url as string) || '',
     createdAt: h.createdAt
       ? new Date(h.createdAt).toISOString()
       : new Date().toISOString(),
     serialized: h.serialized || '',
-    charOffsets: h.charOffsets || null,
+    charOffsets: (h.charOffsets as Record<string, unknown>) || null,
   }));
 }
