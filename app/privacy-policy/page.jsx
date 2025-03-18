@@ -1,10 +1,9 @@
 import Image from 'next/image';
 import Header from '../components/Header';
 import { BookOpen, Lock, Server, Shield, UserCheck } from 'lucide-react';
+import Footer from '../components/Footer';
 
 export default function PrivacyPolicy() {
-  const currentYear = new Date().getFullYear();
-
   return (
     <div className='min-h-screen bg-gray-50 dark:bg-gray-900'>
       <div className='max-w-6xl mx-auto px-4 sm:px-6'>
@@ -296,25 +295,7 @@ export default function PrivacyPolicy() {
         </section>
 
         {/* Footer */}
-        <footer className='py-8 border-t border-gray-200 dark:border-gray-800'>
-          <div className='flex flex-col md:flex-row justify-between items-center'>
-            <div className='flex items-center gap-2 mb-4 md:mb-0'>
-              <Image
-                src='/learnoted-logo-white.svg'
-                alt='LearNoted Logo'
-                width={40}
-                height={40}
-                className='rounded-full'
-              />
-              <span className='text-lg font-semibold text-gray-800 dark:text-white'>
-                LearNoted
-              </span>
-            </div>
-            <div className='text-sm text-gray-500 dark:text-gray-400'>
-              © {currentYear} LearNoted. All rights reserved.
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </div>
   );

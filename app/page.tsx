@@ -2,6 +2,7 @@
 import Image from 'next/image';
 import Header from './components/Header';
 import Link from 'next/link';
+import Footer from './components/Footer';
 // No Button import needed
 import { HighlighterIcon, Search, Chrome, BookOpen, Brain } from 'lucide-react';
 import NewsletterForm from './components/NewsletterForm'; // Import the new form component
@@ -596,25 +597,7 @@ export default function HomePage() {
         </section>
 
         {/* Footer */}
-        <footer className='py-8 border-t border-gray-200 dark:border-gray-800'>
-          <div className='flex flex-col md:flex-row justify-between items-center'>
-            <div className='flex items-center gap-2 mb-4 md:mb-0'>
-              <Image
-                src='learnoted-logo-white.svg'
-                alt='AI Extension Logo'
-                width={40}
-                height={40}
-                className='rounded-full'
-              />
-              <span className='text-lg font-semibold text-gray-800 dark:text-white'>
-                LearNoted
-              </span>
-            </div>
-            <div className='text-sm text-gray-500 dark:text-gray-400'>
-              © {new Date().getFullYear()} AI Extension. All rights reserved.
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </div>
   );

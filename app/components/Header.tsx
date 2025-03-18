@@ -38,7 +38,7 @@ export default function Header() {
           href='/founders-letter'
           className='text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition-colors'
         >
-          Founder's Letter
+          Founder&apos;s Letter
         </a>
         <a
           href='/pricing'

@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { CheckCircle } from 'lucide-react';
+import Footer from '../components/Footer';
 
 export default function PricingPage() {
   return (
@@ -201,25 +202,7 @@ export default function PricingPage() {
         </section>
 
         {/* Footer */}
-        <footer className='border-t border-gray-200 dark:border-gray-800 pt-8 pb-8'>
-          <div className='flex flex-col md:flex-row justify-between items-center'>
-            <div className='flex items-center gap-2 mb-4 md:mb-0'>
-              <Image
-                src='/learnoted-logo-white.svg'
-                alt='learnoted Logo'
-                width={32}
-                height={32}
-                className='rounded-full'
-              />
-              <span className='text-lg font-semibold text-gray-800 dark:text-white'>
-                AI Extension
-              </span>
-            </div>
-            <div className='text-sm text-gray-500 dark:text-gray-400'>
-              © {new Date().getFullYear()} AI Extension. All rights reserved.
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </div>
   );
