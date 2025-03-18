@@ -26,7 +26,7 @@ export default function AboutPage() {
                 <div className='flex-shrink-0'>
                   <div className='w-32 h-32 md:w-36 md:h-36 relative rounded-full overflow-hidden border-4 border-purple-600 dark:border-purple-400'>
                     <Image
-                      src='/creator-avatar.jpg'
+                      src='https://pbs.twimg.com/profile_images/1801314519765151744/4RMIBbCJ_400x400.jpg'
                       alt='Harsh'
                       fill
                       className='object-cover'

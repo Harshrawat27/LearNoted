@@ -5,6 +5,10 @@ module.exports = {
         protocol: 'https',
         hostname: 'img.freepik.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'pbs.twimg.com',
+      },
     ],
   },
   async headers() {
