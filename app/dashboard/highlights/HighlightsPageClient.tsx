@@ -86,41 +86,10 @@ export default function HighlightsPageClient({
     []
   );
 
-  // Local filtering function for when API doesn't support domain search
-  //   const filterHighlights = (
-  //     allHighlights: HighlightItem[],
-  //     term: string,
-  //     filter: string
-  //   ): HighlightItem[] => {
-  //     if (!term) return allHighlights;
-
-  //     const lowerTerm = term.toLowerCase();
-
-  //     return allHighlights.filter((highlight) => {
-  //       if (filter === 'domain' || filter === 'all') {
-  //         const domain = getDomain(highlight.url).toLowerCase();
-  //         if (domain.includes(lowerTerm)) return true;
-  //       }
-
-  //       if (filter === 'text' || filter === 'all') {
-  //         if (highlight.text.toLowerCase().includes(lowerTerm)) return true;
-  //       }
-
-  //       return false;
-  //     });
-  //   };
-
   // Reset and fetch when search term changes
   useEffect(() => {
     setPage(1);
-
-    // If API supports search filtering
     fetchHighlights(1, searchTerm, searchFilter);
-
-    // Alternatively, use local filtering if API doesn't support domain search:
-    // const filtered = filterHighlights(initialHighlights, searchTerm, searchFilter);
-    // setHighlights(filtered);
-    // setHasMore(false); // Disable infinite scroll for filtered results
   }, [searchTerm, searchFilter, fetchHighlights]);
 
   // Infinite scroll with Intersection Observer
@@ -367,12 +336,14 @@ export default function HighlightsPageClient({
                   </div>
                 </div>
 
-                {/* <div>
-                  <h3 className='text-lg font-semibold mb-2'>Context</h3>
-                  <p className='text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 p-4 rounded-lg'>
-                    {selectedHighlight.context}
-                  </p>
-                </div> */}
+                {selectedHighlight.context && (
+                  <div>
+                    <h3 className='text-lg font-semibold mb-2'>Context</h3>
+                    <p className='text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 p-4 rounded-lg'>
+                      {selectedHighlight.context}
+                    </p>
+                  </div>
+                )}
 
                 <div>
                   <h3 className='text-lg font-semibold mb-2'>Source</h3>

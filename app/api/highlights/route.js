@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../lib/authOptions';
 import dbConnect from '../../lib/dbConnect';
-import DomainHighlight from '../../../models/Highlight';
+import URLHighlight from '../../../models/URLHighlight';
 import jwt from 'jsonwebtoken';
 
 const corsHeaders = {
@@ -11,17 +11,6 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization, Origin',
   'Access-Control-Allow-Credentials': 'true',
 };
-
-// Helper function to extract domain from URL
-function extractDomain(url) {
-  try {
-    const parsedUrl = new URL(url);
-    return parsedUrl.hostname;
-  } catch (error) {
-    console.error('Error extracting domain:', error);
-    return url; // Fallback to the whole URL if parsing fails
-  }
-}
 
 export async function OPTIONS() {
   return NextResponse.json(null, {
@@ -74,45 +63,19 @@ export async function POST(req) {
       );
     }
 
-    const domain = extractDomain(url);
-
     // Check if this is a special action to remove all highlights
     if (body.action === 'removeAllHighlights' && url) {
-      // Find the domain record and remove all highlights for the specific URL
-      const domainRecord = await DomainHighlight.findOne({
+      // Find the URL record
+      const result = await URLHighlight.deleteOne({
         userEmail,
-        domain,
+        url,
       });
 
-      if (domainRecord) {
-        // Filter out highlights with the matching URL
-        const originalCount = domainRecord.highlights.length;
-        domainRecord.highlights = domainRecord.highlights.filter(
-          (h) => h.url !== url
-        );
-
-        // If no highlights remain, remove the entire domain record
-        if (domainRecord.highlights.length === 0) {
-          await DomainHighlight.deleteOne({ _id: domainRecord._id });
-          return NextResponse.json(
-            { message: 'All highlights removed', count: originalCount },
-            { headers: corsHeaders }
-          );
-        } else {
-          // Otherwise save the updated domain record
-          await domainRecord.save();
-          return NextResponse.json(
-            {
-              message: 'All highlights removed for URL',
-              count: originalCount - domainRecord.highlights.length,
-            },
-            { headers: corsHeaders }
-          );
-        }
-      }
-
       return NextResponse.json(
-        { message: 'No highlights found to remove', count: 0 },
+        {
+          message: 'All highlights removed',
+          count: result.deletedCount > 0 ? 1 : 0,
+        },
         { headers: corsHeaders }
       );
     }
@@ -121,30 +84,29 @@ export async function POST(req) {
     const newHighlight = {
       text: body.text,
       color: body.color,
-      url: url,
       serialized: body.serialized || '',
       context: body.context || '',
       charOffsets: body.charOffsets || null,
       createdAt: new Date(),
     };
 
-    // Find or create the domain record
-    let domainRecord = await DomainHighlight.findOne({
+    // Find or create the URL record
+    let urlRecord = await URLHighlight.findOne({
       userEmail,
-      domain,
+      url,
     });
 
-    if (!domainRecord) {
-      domainRecord = new DomainHighlight({
+    if (!urlRecord) {
+      urlRecord = new URLHighlight({
         userEmail,
-        domain,
+        url,
         highlights: [newHighlight],
       });
     } else {
-      domainRecord.highlights.push(newHighlight);
+      urlRecord.highlights.push(newHighlight);
     }
 
-    await domainRecord.save();
+    await urlRecord.save();
 
     // Return the newly created highlight item
     return NextResponse.json(newHighlight, { headers: corsHeaders });
@@ -202,40 +164,40 @@ export async function GET(req) {
 
     // Match stage - filter by userEmail
     let matchStage = { userEmail };
+
+    // If exact URL is provided, add it to the match
+    if (urlFilter) {
+      matchStage.url = urlFilter;
+    }
+
     aggregationPipeline.push({ $match: matchStage });
+
+    // Apply search based on searchType (if not filtered by exact URL)
+    if (search && !urlFilter) {
+      let searchMatch = {};
+
+      if (searchType === 'domain' || searchType === 'all') {
+        searchMatch.url = { $regex: search, $options: 'i' };
+      }
+
+      if (Object.keys(searchMatch).length > 0) {
+        aggregationPipeline.push({ $match: searchMatch });
+      }
+    }
 
     // Unwind the highlights array
     aggregationPipeline.push({ $unwind: '$highlights' });
 
-    // Filter highlights based on search criteria
-    if (search || urlFilter) {
-      let highlightMatch = {};
-
-      if (urlFilter) {
-        highlightMatch['highlights.url'] = urlFilter;
-      }
-
-      if (search) {
-        if (searchType === 'domain') {
-          highlightMatch['domain'] = { $regex: search, $options: 'i' };
-        } else if (searchType === 'text') {
-          highlightMatch['$or'] = [
+    // Apply text search if needed
+    if (search && (searchType === 'text' || searchType === 'all')) {
+      aggregationPipeline.push({
+        $match: {
+          $or: [
             { 'highlights.text': { $regex: search, $options: 'i' } },
             { 'highlights.context': { $regex: search, $options: 'i' } },
-          ];
-        } else if (searchType === 'all') {
-          highlightMatch['$or'] = [
-            { domain: { $regex: search, $options: 'i' } },
-            { 'highlights.url': { $regex: search, $options: 'i' } },
-            { 'highlights.text': { $regex: search, $options: 'i' } },
-            { 'highlights.context': { $regex: search, $options: 'i' } },
-          ];
-        }
-      }
-
-      if (Object.keys(highlightMatch).length > 0) {
-        aggregationPipeline.push({ $match: highlightMatch });
-      }
+          ],
+        },
+      });
     }
 
     // Sort by createdAt
@@ -246,35 +208,45 @@ export async function GET(req) {
     aggregationPipeline.push({ $skip: skip });
     aggregationPipeline.push({ $limit: limit });
 
-    // Project to reshape the output
+    // Project to reshape the output to match the original format
     aggregationPipeline.push({
       $project: {
         _id: '$highlights._id',
         text: '$highlights.text',
         color: '$highlights.color',
-        url: '$highlights.url',
+        url: 1,
         serialized: '$highlights.serialized',
         context: '$highlights.context',
         charOffsets: '$highlights.charOffsets',
         createdAt: '$highlights.createdAt',
-        domain: 1,
         userEmail: 1,
       },
     });
 
     // Execute the aggregation
-    const highlights = await DomainHighlight.aggregate(aggregationPipeline);
+    const highlights = await URLHighlight.aggregate(aggregationPipeline);
 
     // Count total documents for pagination
     let countPipeline = [{ $match: matchStage }, { $unwind: '$highlights' }];
 
-    if (aggregationPipeline.length > 2) {
-      // Add any filtering match stages from the main pipeline
-      countPipeline.push(aggregationPipeline[2]);
+    // Add any additional filters for text search
+    if (
+      search &&
+      (searchType === 'text' || searchType === 'all') &&
+      !urlFilter
+    ) {
+      countPipeline.push({
+        $match: {
+          $or: [
+            { 'highlights.text': { $regex: search, $options: 'i' } },
+            { 'highlights.context': { $regex: search, $options: 'i' } },
+          ],
+        },
+      });
     }
 
     countPipeline.push({ $count: 'total' });
-    const countResult = await DomainHighlight.aggregate(countPipeline);
+    const countResult = await URLHighlight.aggregate(countPipeline);
 
     const total = countResult.length > 0 ? countResult[0].total : 0;
     const hasMore = skip + highlights.length < total;
@@ -341,73 +313,48 @@ export async function DELETE(req) {
 
   try {
     if (urlFilter) {
-      const domain = extractDomain(urlFilter);
-
-      // Find the domain record
-      const domainRecord = await DomainHighlight.findOne({
+      // Delete all highlights for this URL
+      const result = await URLHighlight.deleteOne({
         userEmail,
-        domain,
+        url: urlFilter,
       });
 
-      if (domainRecord) {
-        // Filter out highlights with the matching URL
-        const originalCount = domainRecord.highlights.length;
-        domainRecord.highlights = domainRecord.highlights.filter(
-          (h) => h.url !== urlFilter
+      return NextResponse.json(
+        { message: 'Highlights removed', count: result.deletedCount },
+        { headers: corsHeaders }
+      );
+    } else if (highlightId) {
+      // Delete a specific highlight by ID
+      const urlRecord = await URLHighlight.findOne({
+        userEmail,
+        'highlights._id': highlightId,
+      });
+
+      if (urlRecord) {
+        const originalLength = urlRecord.highlights.length;
+        urlRecord.highlights = urlRecord.highlights.filter(
+          (h) => h._id.toString() !== highlightId
         );
 
-        // If no highlights remain, remove the entire domain record
-        if (domainRecord.highlights.length === 0) {
-          await DomainHighlight.deleteOne({ _id: domainRecord._id });
+        // If no highlights remain, remove the entire URL record
+        if (urlRecord.highlights.length === 0) {
+          await URLHighlight.deleteOne({ _id: urlRecord._id });
         } else {
-          // Otherwise save the updated domain record
-          await domainRecord.save();
+          // Otherwise save the updated URL record
+          await urlRecord.save();
         }
 
         return NextResponse.json(
           {
-            message: 'Highlights removed',
-            count: originalCount - domainRecord.highlights.length,
+            message: 'Highlight removed',
+            count: originalLength - urlRecord.highlights.length,
           },
           { headers: corsHeaders }
         );
       }
 
       return NextResponse.json(
-        { message: 'No highlights found to remove', count: 0 },
-        { headers: corsHeaders }
-      );
-    } else if (highlightId) {
-      // Find the highlight by ID and remove it
-      let removed = 0;
-
-      // We need to iterate through all domain records and remove the highlight with matching ID
-      const domains = await DomainHighlight.find({ userEmail });
-
-      for (const domain of domains) {
-        const originalLength = domain.highlights.length;
-        domain.highlights = domain.highlights.filter(
-          (h) => h._id.toString() !== highlightId
-        );
-
-        if (domain.highlights.length < originalLength) {
-          // We found and removed the highlight
-          removed = originalLength - domain.highlights.length;
-
-          // If no highlights remain, remove the entire domain record
-          if (domain.highlights.length === 0) {
-            await DomainHighlight.deleteOne({ _id: domain._id });
-          } else {
-            // Otherwise save the updated domain record
-            await domain.save();
-          }
-
-          break;
-        }
-      }
-
-      return NextResponse.json(
-        { message: 'Highlight removed', count: removed },
+        { message: 'No highlight found with this ID', count: 0 },
         { headers: corsHeaders }
       );
     }
