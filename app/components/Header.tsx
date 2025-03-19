@@ -3,12 +3,16 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
-// No Button import needed
+import { useTheme } from './ThemeContext';
+import { Moon, Sun } from 'lucide-react'; // Import icons for the toggle
 
 export default function Header() {
   // Get session info from NextAuth
   const { data: session, status } = useSession();
   const isLoading = status === 'loading';
+
+  // Get theme context
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <header className='flex items-center justify-between py-4 px-6 row-start-1 border-b border-gray-200 dark:border-gray-800'>
@@ -54,7 +58,17 @@ export default function Header() {
         </a>
       </nav>
 
-      <div>
+      <div className='flex items-center gap-4'>
+        {/* Dark Mode Toggle Button */}
+        <button
+          onClick={toggleTheme}
+          className='p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors'
+          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+        >
+          {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+        </button>
+
+        {/* Login/Dashboard Button */}
         {isLoading ? (
           <button
             disabled
