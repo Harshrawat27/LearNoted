@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 export async function GET() {
   // Base URL for your site
   const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || 'https://www.learnoted.com/';
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://www.learnoted.com';
 
   // Current date in YYYY-MM-DD format
   const date = new Date().toISOString().split('T')[0];
