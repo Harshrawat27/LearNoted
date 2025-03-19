@@ -4,7 +4,7 @@ import Header from './components/Header';
 import Link from 'next/link';
 import Footer from './components/Footer';
 // No Button import needed
-import { HighlighterIcon, Search, Chrome, BookOpen, Brain } from 'lucide-react';
+import { HighlighterIcon, Chrome, BookOpen, Brain, Video } from 'lucide-react';
 import NewsletterForm from './components/NewsletterForm'; // Import the new form component
 
 export default function HomePage() {
@@ -77,7 +77,7 @@ export default function HomePage() {
             <div className='grid md:grid-cols-2 gap-12 items-center'>
               <div className='bg-white dark:bg-gray-800 rounded-2xl shadow-md p-3 relative'>
                 <div className='absolute -top-4 -left-4 bg-purple-100 dark:bg-purple-900/20 p-4 rounded-xl'>
-                  <HighlighterIcon className='h-8 w-8 text-purple-600 dark:text-purple-400' />
+                  <BookOpen className='h-8 w-8 text-purple-600 dark:text-purple-400' />
                 </div>
                 <Image
                   src='/Vocabulary.gif'
@@ -257,11 +257,11 @@ export default function HomePage() {
               </div>
               <div className='order-1 md:order-2 bg-white dark:bg-gray-800 rounded-2xl shadow-md p-3 relative'>
                 <div className='absolute -top-4 -right-4 bg-purple-100 dark:bg-purple-900/20 p-4 rounded-xl'>
-                  <Search className='h-8 w-8 text-purple-600 dark:text-purple-400' />
+                  <Video className='h-8 w-8 text-purple-600 dark:text-purple-400' />
                 </div>
                 <Image
                   src='/youtube-highlight-1.gif'
-                  alt='Search Feature'
+                  alt='Youtube timestamp'
                   width={500}
                   height={300}
                   className='rounded-lg'
@@ -273,7 +273,7 @@ export default function HomePage() {
             <div className='grid md:grid-cols-2 gap-12 items-center'>
               <div className='bg-white dark:bg-gray-800 rounded-2xl shadow-md p-3 relative'>
                 <div className='absolute -top-4 -left-4 bg-purple-100 dark:bg-purple-900/20 p-4 rounded-xl'>
-                  <Chrome className='h-8 w-8 text-purple-600 dark:text-purple-400' />
+                  <HighlighterIcon className='h-8 w-8 text-purple-600 dark:text-purple-400' />
                 </div>
                 <Image
                   src='/highlight.gif'
