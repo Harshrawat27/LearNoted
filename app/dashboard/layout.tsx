@@ -100,7 +100,7 @@ export default function DashboardLayout({
                 height={40}
                 className='rounded-full'
               />
-              z<h1 className='text-xl font-bold'>LearNoted</h1>
+              <h1 className='text-xl font-bold'>LearNoted</h1>
             </div>
           </Link>
 
