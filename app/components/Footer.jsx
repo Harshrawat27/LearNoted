@@ -1,9 +1,13 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTheme } from './ThemeContext';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-
+  // Get theme context
+  const { theme, toggleTheme } = useTheme();
   return (
     <footer className='py-8 border-t border-gray-200 dark:border-gray-800'>
       <div className='max-w-6xl mx-auto px-4 sm:px-6'>
@@ -12,8 +16,12 @@ export default function Footer() {
           <Link href='/'>
             <div className='flex items-center gap-2 mb-4 md:mb-0'>
               <Image
-                src='/learnoted-logo-white.svg'
-                alt='LearNoted Logo'
+                src={
+                  theme === 'light'
+                    ? '/LearNoted-logo-white-512.svg'
+                    : '/learnoted-logo-white.svg'
+                }
+                alt='Logo'
                 width={40}
                 height={40}
                 className='rounded-full'

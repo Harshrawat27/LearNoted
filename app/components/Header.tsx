@@ -19,10 +19,14 @@ export default function Header() {
       <Link href='/'>
         <div className='flex items-center gap-2'>
           <Image
-            src='/learnoted-logo-white.svg'
-            alt='AI Extension Logo'
-            width={50}
-            height={50}
+            src={
+              theme === 'light'
+                ? '/LearNoted-logo-white-512.svg'
+                : '/learnoted-logo-white.svg'
+            }
+            alt='Logo'
+            width={40}
+            height={40}
             className='rounded-full'
           />
           <h1 className='text-2xl font-bold text-gray-800 dark:text-white'>

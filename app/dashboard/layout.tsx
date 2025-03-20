@@ -90,13 +90,17 @@ export default function DashboardLayout({
             {/* Logo and Title */}
             <div className='flex items-center gap-3 p-5 border-b border-gray-200 dark:border-gray-700'>
               <Image
-                src='/learnoted-logo-white.svg'
+                src={
+                  theme === 'light'
+                    ? '/LearNoted-logo-white-512.svg'
+                    : '/learnoted-logo-white.svg'
+                }
                 alt='Logo'
                 width={40}
                 height={40}
                 className='rounded-full'
               />
-              <h1 className='text-xl font-bold'>LearNoted</h1>
+              z<h1 className='text-xl font-bold'>LearNoted</h1>
             </div>
           </Link>
 
