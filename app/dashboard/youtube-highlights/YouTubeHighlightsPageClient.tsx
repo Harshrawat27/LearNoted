@@ -11,6 +11,7 @@ import {
   Youtube,
   Trash2,
 } from 'lucide-react';
+import { ToastContainer } from './Toast';
 
 interface Timestamp {
   _id: string;
@@ -51,6 +52,16 @@ export default function YouTubeHighlightsPageClient({
   const [selectedHighlight, setSelectedHighlight] =
     useState<YouTubeHighlight | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [toasts, setToasts] = useState<
+    Array<{
+      id: string;
+      message: string;
+      type: 'success' | 'error' | 'confirm';
+      onConfirm?: () => Promise<void> | void;
+      onCancel?: () => void;
+      duration?: number;
+    }>
+  >([]);
 
   const loaderRef = useRef<HTMLDivElement>(null);
   const itemsPerPage = 20;
@@ -133,6 +144,40 @@ export default function YouTubeHighlightsPageClient({
     return `https://www.youtube.com/watch?v=${videoId}&t=${roundedSeconds}s`;
   };
 
+  // Function to add a toast
+  const addToast = (toast: {
+    id: string;
+    message: string;
+    type: 'success' | 'error' | 'confirm';
+    onConfirm?: () => Promise<void> | void;
+    onCancel?: () => void;
+    duration?: number;
+  }) => {
+    setToasts((prev) => [...prev, toast]);
+  };
+
+  // Function to remove a toast
+  const removeToast = (id: string) => {
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
+  };
+
+  // Handle confirmation to delete timestamp
+  const confirmDeleteTimestamp = (highlightId: string, timestampId: string) => {
+    const toastId = `delete-${timestampId}-${Date.now()}`;
+
+    addToast({
+      id: toastId,
+      message: 'Are you sure you want to delete this timestamp?',
+      type: 'confirm',
+      onConfirm: async () => {
+        await deleteTimestamp(highlightId, timestampId);
+      },
+      onCancel: () => {
+        // Just close the toast
+      },
+    });
+  };
+
   // Delete timestamp function
   const deleteTimestamp = async (highlightId: string, timestampId: string) => {
     if (!highlightId || !timestampId || isDeleting) return;
@@ -180,9 +225,24 @@ export default function YouTubeHighlightsPageClient({
           ),
         });
       }
+
+      // Show success toast
+      addToast({
+        id: `success-${Date.now()}`,
+        message: 'Timestamp deleted successfully',
+        type: 'success',
+        duration: 3000,
+      });
     } catch (error) {
       console.error('Error deleting timestamp:', error);
-      alert('Failed to delete timestamp. Please try again.');
+
+      // Show error toast
+      addToast({
+        id: `error-${Date.now()}`,
+        message: 'Failed to delete timestamp. Please try again.',
+        type: 'error',
+        duration: 5000,
+      });
     } finally {
       setIsDeleting(false);
     }
@@ -434,16 +494,10 @@ export default function YouTubeHighlightsPageClient({
                           <button
                             onClick={(e) => {
                               e.preventDefault();
-                              if (
-                                confirm(
-                                  'Are you sure you want to delete this timestamp?'
-                                )
-                              ) {
-                                deleteTimestamp(
-                                  selectedHighlight._id,
-                                  timestamp._id
-                                );
-                              }
+                              confirmDeleteTimestamp(
+                                selectedHighlight._id,
+                                timestamp._id
+                              );
                             }}
                             disabled={isDeleting}
                             className='ml-2 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-colors'
@@ -476,6 +530,9 @@ export default function YouTubeHighlightsPageClient({
           )}
         </div>
       </div>
+
+      {/* Toast Container */}
+      <ToastContainer toasts={toasts} removeToast={removeToast} />
     </div>
   );
 }
