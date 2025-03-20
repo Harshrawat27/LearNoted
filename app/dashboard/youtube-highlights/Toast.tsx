@@ -15,7 +15,6 @@ interface ToastProps {
 }
 
 export function Toast({
-  id,
   message,
   type,
   onConfirm,
