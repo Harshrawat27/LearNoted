@@ -9,6 +9,7 @@ import {
   Video,
   SquarePlay,
   Youtube,
+  Trash2,
 } from 'lucide-react';
 
 interface Timestamp {
@@ -49,6 +50,7 @@ export default function YouTubeHighlightsPageClient({
   const [isLoading, setIsLoading] = useState(false);
   const [selectedHighlight, setSelectedHighlight] =
     useState<YouTubeHighlight | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const loaderRef = useRef<HTMLDivElement>(null);
   const itemsPerPage = 20;
@@ -129,6 +131,61 @@ export default function YouTubeHighlightsPageClient({
   const getVideoLink = (videoId: string, timeInSeconds: number) => {
     const roundedSeconds = Math.round(timeInSeconds);
     return `https://www.youtube.com/watch?v=${videoId}&t=${roundedSeconds}s`;
+  };
+
+  // Delete timestamp function
+  const deleteTimestamp = async (highlightId: string, timestampId: string) => {
+    if (!highlightId || !timestampId || isDeleting) return;
+
+    setIsDeleting(true);
+
+    try {
+      const response = await fetch('/api/youtube-timestamps/delete-timestamp', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          videoId: highlightId,
+          timestampId: timestampId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete timestamp');
+      }
+
+      // Update the local state after successful deletion
+      setHighlights((prevHighlights) =>
+        prevHighlights.map((highlight) => {
+          if (highlight._id === highlightId) {
+            // Return highlight with the timestamp removed
+            return {
+              ...highlight,
+              timestamps: highlight.timestamps.filter(
+                (ts) => ts._id !== timestampId
+              ),
+            };
+          }
+          return highlight;
+        })
+      );
+
+      // Update selected highlight if it's the one we just modified
+      if (selectedHighlight && selectedHighlight._id === highlightId) {
+        setSelectedHighlight({
+          ...selectedHighlight,
+          timestamps: selectedHighlight.timestamps.filter(
+            (ts) => ts._id !== timestampId
+          ),
+        });
+      }
+    } catch (error) {
+      console.error('Error deleting timestamp:', error);
+      alert('Failed to delete timestamp. Please try again.');
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   return (
@@ -374,6 +431,26 @@ export default function YouTubeHighlightsPageClient({
                               )}
                             </p>
                           </div>
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (
+                                confirm(
+                                  'Are you sure you want to delete this timestamp?'
+                                )
+                              ) {
+                                deleteTimestamp(
+                                  selectedHighlight._id,
+                                  timestamp._id
+                                );
+                              }
+                            }}
+                            disabled={isDeleting}
+                            className='ml-2 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-colors'
+                            aria-label='Delete timestamp'
+                          >
+                            <Trash2 className='h-5 w-5' />
+                          </button>
                         </div>
                       </li>
                     ))}
