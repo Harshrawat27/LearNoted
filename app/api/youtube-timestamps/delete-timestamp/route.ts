@@ -52,9 +52,19 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
+    // Define timestamp interface to avoid using 'any'
+    interface TimestampDoc {
+      _id: {
+        toString: () => string;
+      };
+      time: number;
+      comment: string;
+      createdAt: string;
+    }
+
     // 6. Remove the timestamp
     const timestampIndex = videoDoc.timestamps.findIndex(
-      (ts: any) => ts._id.toString() === timestampId
+      (ts: TimestampDoc) => ts._id.toString() === timestampId
     );
 
     if (timestampIndex === -1) {
