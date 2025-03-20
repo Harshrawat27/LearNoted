@@ -5,9 +5,15 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('light');
+  // Initialize with a placeholder value
+  const [theme, setTheme] = useState('');
 
   useEffect(() => {
+    // Check if dark class is present (set by our early script)
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    setTheme(isDarkMode ? 'dark' : 'light');
+
+    // Also check localStorage to ensure consistency
     const storedTheme = localStorage.getItem('theme');
     if (storedTheme) {
       setTheme(storedTheme);

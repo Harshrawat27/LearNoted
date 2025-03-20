@@ -34,10 +34,32 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
+      <head>
+        {/* Add this script to prevent flash of wrong theme */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                // Check for stored theme preference
+                const storedTheme = localStorage.getItem('theme');
+                
+                // If we have a stored theme, use it
+                if (storedTheme) {
+                  document.documentElement.classList.toggle('dark', storedTheme === 'dark');
+                } else {
+                  // Otherwise, check system preference
+                  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  document.documentElement.classList.toggle('dark', prefersDark);
+                }
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider>
           <Layout>
-            <ClientProvider>{children}</ClientProvider>{' '}
+            <ClientProvider>{children}</ClientProvider>
           </Layout>
         </ThemeProvider>
       </body>
