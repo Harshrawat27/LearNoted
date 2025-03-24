@@ -325,12 +325,7 @@ export default function ProPlanPage() {
                   Pro Plan - $5.00 / for 30 days
                 </h2>
               </div>
-              <p className='text-xl text-gray-600 dark:text-gray-300 mb-8'>
-                Purchase now during our pre-launch period and receive 45 days of
-                premium access for just $5.00 instead of the standard 30 days.
-                This special offer applies to your first purchase only.
-                We&apos;ll notify you as soon as Learnoted goes live.{' '}
-              </p>
+
               <ul className='space-y-3 mb-6'>
                 {[
                   'Unlimited highlighted pages',

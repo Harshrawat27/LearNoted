@@ -34,7 +34,11 @@ export default function HomePage() {
                 all in one place, always at your fingertips.
               </p>
               <div className='flex flex-col sm:flex-row gap-4'>
-                <Link href='/#contact'>
+                <Link
+                  href='https://chromewebstore.google.com/detail/learnoted/pblcjennfkjfaieknemicnjkbplodfnf'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
                   <button className='bg-purple-600 hover:bg-purple-700 text-white px-8 py-6 text-lg rounded-md transition-colors'>
                     Add to Chrome
                   </button>
@@ -581,15 +585,25 @@ export default function HomePage() {
             <div className='grid md:grid-cols-2 gap-8 items-center'>
               <div>
                 <h2 className='text-3xl font-bold text-gray-900 dark:text-white mb-4'>
-                  Early bird access
+                  Early access – Now Live!
                 </h2>
                 <p className='text-lg text-gray-700 dark:text-gray-300 mb-6'>
-                  Our extension is currently under review. Subscribe now to be
-                  notified the moment Learnoted launches and be among the first
-                  to enhance your browsing experience. <br></br>
-                  <br></br> If you purchase now during our pre-launch,
-                  you&apos;ll get 45 days of premium features instead of 30—for
-                  just $5 on your{' '}
+                  Our extension has officially launched!{' '}
+                  <Link
+                    href='https://chromewebstore.google.com/detail/learnoted/pblcjennfkjfaieknemicnjkbplodfnf'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className=' text-purple-400 hover:text-purple-600'
+                  >
+                    Download
+                  </Link>{' '}
+                  Learnoted now and enhance your browsing experience.<br></br>
+                  <br></br>
+                  Subscribe to stay updated on new features, exclusive offers,
+                  and tips to get the most out of Learnoted.<br></br>
+                  <br></br>
+                  If you purchase now, you'll still get 45 days of premium
+                  features instead of 30—for just $5 on your
                   <Link
                     className=' text-purple-400 hover:text-purple-600'
                     href='/pro-plan'

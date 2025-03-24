@@ -209,9 +209,13 @@ export default function PricingPage() {
                 Get Started for Free
               </button>
             </Link>
-            <Link href='#features'>
+            <Link
+              href='https://chromewebstore.google.com/detail/learnoted/pblcjennfkjfaieknemicnjkbplodfnf'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
               <button className='bg-white dark:bg-gray-800 text-purple-600 dark:text-purple-400 border border-purple-600 dark:border-purple-400 font-medium py-3 px-8 rounded-xl transition-colors'>
-                Learn More
+                Download
               </button>
             </Link>
           </div>
