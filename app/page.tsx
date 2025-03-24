@@ -602,7 +602,7 @@ export default function HomePage() {
                   Subscribe to stay updated on new features, exclusive offers,
                   and tips to get the most out of Learnoted.<br></br>
                   <br></br>
-                  If you purchase now, you'll still get 45 days of premium
+                  If you purchase now, you&apos;ll still get 45 days of premium
                   features instead of 30—for just $5 on your
                   <Link
                     className=' text-purple-400 hover:text-purple-600'
