@@ -17,12 +17,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Learnoted: Save, Define & Highlight Your Way Through the Web',
+  title: 'LearNoted: Save, Define & Highlight Your Way Through the Web',
   description:
-    'Transform how you browse with Learnoted. Look up words instantly, highlight important content, and save video timestamps—all in one dashboard. Your personal web learning assistant.',
+    'Transform how you browse with LearNoted. Look up words instantly, highlight important content, and save video timestamps—all in one dashboard. Your personal web learning assistant.',
   icons: {
-    icon: '/LearNoted-logo-white-512.svg', // Path to favicon in public directory
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/LearNoted-logo-white-512.svg', type: 'image/svg+xml' },
+    ],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
+    shortcut: [{ url: '/favicon.ico' }],
   },
+  manifest: '/site.webmanifest',
   other: {
     'google-site-verification': 'OUXooCc_fRcKZ9mOTlYEnT8NJCOIdpjE1t_zT_nm2B4',
   },

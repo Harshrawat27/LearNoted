@@ -1,0 +1,13 @@
+# public/robots.txt
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://www.learnoted.com/sitemap.xml
+
+# Disallow authentication and API routes
+Disallow: /api/
+Disallow: /auth/
+
+# Disallow dashboard area for privacy
+Disallow: /dashboard/
