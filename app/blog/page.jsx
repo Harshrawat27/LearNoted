@@ -34,6 +34,7 @@ export default async function BlogPage() {
           </p>
 
           {/* Categories */}
+          {/* Categories */}
           <div className='flex flex-wrap justify-center gap-2 mb-12'>
             <Link
               href='/blog'
@@ -41,15 +42,23 @@ export default async function BlogPage() {
             >
               All
             </Link>
-            {validCategories.map((category) => (
-              <Link
-                key={category._id}
-                href={`/blog/category/${category.slug.current}`}
-                className='px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors'
-              >
-                {category.title || 'Untitled Category'}
-              </Link>
-            ))}
+            {validCategories &&
+              validCategories.length > 0 &&
+              validCategories.map((category) => {
+                if (!category || !category.slug || !category.slug.current) {
+                  console.log('Found invalid category:', category);
+                  return null;
+                }
+                return (
+                  <Link
+                    key={category._id}
+                    href={`/blog/category/${category.slug.current}`}
+                    className='px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors'
+                  >
+                    {category.title || 'Untitled Category'}
+                  </Link>
+                );
+              })}
           </div>
         </section>
 

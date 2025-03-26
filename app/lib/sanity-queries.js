@@ -61,16 +61,32 @@ export async function getPostsByCategory(categorySlug) {
 
 // Get all categories
 export async function getAllCategories() {
-  const categories = await client.fetch(
-    groq`*[_type == "category"] | order(title asc) {
-      _id,
-      title,
-      slug,
-      description
-    }`
-  );
+  try {
+    const categories = await client.fetch(
+      groq`*[_type == "category"] | order(title asc) {
+          _id,
+          title,
+          slug,
+          description
+        }`
+    );
 
-  return prepareForClient(categories);
+    console.log(`Fetched ${categories.length} categories from Sanity`);
+
+    // Log the raw data to see what's coming from Sanity
+    if (categories.length > 0) {
+      console.log(
+        'First category example:',
+        JSON.stringify(categories[0], null, 2)
+      );
+    }
+
+    // Return the prepared data
+    return prepareForClient(categories);
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    return []; // Return empty array on error to prevent app crashes
+  }
 }
 
 // Get recent posts (useful for sidebars, related content)
