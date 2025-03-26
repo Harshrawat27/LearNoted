@@ -36,11 +36,13 @@ export async function generateMetadata({ params }) {
 export async function generateStaticParams() {
   const categories = await getAllCategories();
 
-  return categories.map((category) => ({
-    slug: category.slug.current,
-  }));
+  // Filter out categories without a valid slug
+  return categories
+    .filter((category) => category && category.slug && category.slug.current)
+    .map((category) => ({
+      slug: category.slug.current,
+    }));
 }
-
 export default async function CategoryPage({ params }) {
   const categories = await getAllCategories();
   const category = categories.find((cat) => cat.slug.current === params.slug);
