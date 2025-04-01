@@ -16,6 +16,7 @@
     "@sanity/image-url": "^1.1.0",
     "@sanity/vision": "^3.81.0",
     "@types/mongoose": "^5.11.97",
+    "@vercel/analytics": "^1.5.0",
     "axios": "^1.7.9",
     "chart.js": "^4.4.7",
     "class-variance-authority": "^0.7.1",
