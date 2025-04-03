@@ -134,11 +134,11 @@ export default function AboutPage() {
                   <div>
                     <p className='mb-4'>
                       You can start using it for free, and there's a paid plan
-                      too—$5 for 30 days. Why not $5/month? Because I don't want
+                      too—$5 for 90 days. Why not $5/month? Because I don't want
                       this to be another forgotten subscription silently
-                      charging you. Instead, you'll pay manually every 30 days,
+                      charging you. Instead, you'll pay manually every 90 days,
                       only when you're actively using it. And don't worry—we'll
-                      remind you before your 30 days are up.
+                      remind you before your 90 days are up.
                     </p>
                   </div>
                 </div>

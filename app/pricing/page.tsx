@@ -105,7 +105,7 @@ export default function PricingPage() {
             <div className='text-4xl font-bold text-gray-900 dark:text-white mb-6'>
               $5{' '}
               <span className='text-lg font-normal text-gray-600 dark:text-gray-400'>
-                / for 30 days
+                / for 90 days
               </span>
             </div>
 
@@ -146,7 +146,7 @@ export default function PricingPage() {
               {
                 question: 'Is this a recurring plan?',
                 answer:
-                  'No, this is not a recurring plan. You pay just $5 for 30 days of premium access with no automatic renewals.',
+                  'No, this is not a recurring plan. You pay just $5 for 90 days of premium access with no automatic renewals.',
               },
               {
                 question: 'Is there any subscription option available?',
@@ -155,14 +155,14 @@ export default function PricingPage() {
               },
               {
                 question:
-                  "What happens to my saved data if I don't purchase another 30-day period after my current one expires?",
+                  "What happens to my saved data if I don't purchase another 90 days period after my current one expires?",
                 answer:
-                  "Your saved data will remain accessible for 10 days after your premium period ends. After that, you'll need to purchase another 30-day period to regain access.",
+                  "Your saved data will remain accessible for 10 days after your premium period ends. After that, you'll need to purchase another 90 days period to regain access.",
               },
               {
                 question: 'Can I cancel my plan?',
                 answer:
-                  "Since this is a one-time payment for 30 days of access, there's no need to cancel. We won't charge you again unless you choose to purchase another 30-day period.",
+                  "Since this is a one-time payment for 90 days of access, there's no need to cancel. We won't charge you again unless you choose to purchase another 90 days period.",
               },
               {
                 question:

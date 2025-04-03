@@ -322,7 +322,7 @@ export default function ProPlanPage() {
                   Pro
                 </span>
                 <h2 className='text-2xl font-bold text-gray-900 dark:text-white'>
-                  Pro Plan - $5.00 / for 30 days
+                  Pro Plan - $5.00 / for 90 days
                 </h2>
               </div>
 
