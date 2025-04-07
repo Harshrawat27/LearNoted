@@ -1,36 +1,134 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LearNoted
+
+LearNoted is a comprehensive web learning assistant designed to enhance your browsing experience by providing instant vocabulary lookups, text highlighting, and YouTube timestamp saving—all in one centralized dashboard.
+
+![LearNoted Logo](public/learnoted-logo-white.svg)
+
+## Features
+
+### 🔍 Instant Word Lookup
+- Look up word definitions with a simple keyboard shortcut (Cmd+M / Ctrl+M)
+- Get instant meanings, synonyms, and usage examples without leaving your page
+- All lookups are automatically saved to your personal dashboard
+
+### 🖌️ Smart Highlighting
+- Highlight and save important text across any website
+- Organize highlights by color and category
+- Access your highlights from any device with browser sync
+
+### 📹 YouTube Timestamp Saving
+- Save key moments in YouTube videos with a single click
+- Add notes to mark important points and insights
+- Create a personalized learning timeline for future reference
+
+### 🌗 Dark/Light Mode
+- Support for both light and dark themes
+- Automatic detection of system preferences
+- Toggle between modes with a single click
+
+## Tech Stack
+
+LearNoted is built with modern web technologies:
+
+- **Frontend**: Next.js, React, TypeScript, Tailwind CSS
+- **Backend**: Next.js API Routes, MongoDB, Mongoose
+- **Authentication**: NextAuth.js with GitHub and Google providers
+- **Payment Processing**: PayPal API
+- **Content Management**: Sanity.io (for the blog)
+- **Deployment**: Vercel
+- **UI Components**: Recharts, Lucide React
+
+## Project Structure
+
+```
+app/
+├── api/               # API routes for backend functionality
+├── auth/              # Authentication-related pages
+├── blog/              # Blog pages and components
+├── components/        # Reusable UI components
+├── dashboard/         # User dashboard pages
+├── lib/               # Utility functions and libraries
+├── models/            # Mongoose models for MongoDB
+├── types/             # TypeScript type definitions
+public/                # Static assets
+```
+
+## Key Components
+
+### Authentication System
+- Uses NextAuth.js for secure authentication
+- Supports GitHub and Google OAuth providers
+- JWT tokens for secure API requests and Chrome extension integration
+
+### Dashboard
+- Sections for user profile, saved words, highlights, and YouTube timestamps
+- Infinite scroll pagination for better performance
+- Search functionality for finding saved content
+
+### Subscription Management
+- Free tier with limited functionality
+- Pro plan ($5 for 90 days) with unlimited features
+- Non-recurring payment model to prevent unwanted charges
+
+### Blog Platform
+- Sanity.io integration for content management
+- Categories, authors, and post organization
+- Responsive design for all devices
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 16+ and npm/yarn
+- MongoDB database
+- PayPal Developer account (for payment processing)
+- Sanity.io account (for blog content)
+
+### Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/learnoted.git
+cd learnoted
+```
+
+2. Install dependencies
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Run the development server
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the application
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Chrome Extension
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+LearNoted includes a Chrome extension that enables:
+- Word lookup functionality
+- Highlighting capabilities
+- YouTube timestamp saving
 
-## Learn More
+The extension code is available in a separate repository. Install it from the [Chrome Web Store](https://chromewebstore.google.com/detail/learnoted/pblcjennfkjfaieknemicnjkbplodfnf).
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The application is designed to be deployed on Vercel:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Connect your GitHub repository to Vercel
+2. Configure the environment variables in the Vercel dashboard
+3. Deploy the application
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Author
+
+Created by Harsh Rawat - [GitHub](https://github.com/harshrawat66)
